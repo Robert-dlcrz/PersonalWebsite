@@ -1,0 +1,98 @@
+%PDF-1.4
+1 0 obj
+<<
+/Type /Catalog
+/Pages 2 0 R
+>>
+endobj
+2 0 obj
+<<
+/Type /Pages
+/Kids [3 0 R]
+/Count 1
+>>
+endobj
+3 0 obj
+<<
+/Type /Page
+/Parent 2 0 R
+/Resources <<
+/Font <<
+/F1 <<
+/Type /Font
+/Subtype /Type1
+/BaseFont /Helvetica-Bold
+>>
+/F2 <<
+/Type /Font
+/Subtype /Type1
+/BaseFont /Helvetica
+>>
+>>
+>>
+/MediaBox [0 0 612 792]
+/Contents 4 0 R
+>>
+endobj
+4 0 obj
+<<
+/Length 500
+>>
+stream
+BT
+/F1 36 Tf
+100 700 Td
+(ROBERT DE LA CRUZ) Tj
+ET
+BT
+/F2 18 Tf
+100 660 Td
+(Software Development Engineer) Tj
+ET
+BT
+/F2 12 Tf
+100 620 Td
+(Email: robert@example.com) Tj
+ET
+BT
+/F2 12 Tf
+100 600 Td
+(Website: robertdelacruz.com) Tj
+ET
+BT
+/F1 16 Tf
+100 560 Td
+(PLACEHOLDER RESUME) Tj
+ET
+BT
+/F2 12 Tf
+100 530 Td
+(This is a placeholder PDF file.) Tj
+ET
+BT
+/F2 12 Tf
+100 510 Td
+(Replace this file with your actual resume PDF.) Tj
+ET
+BT
+/F2 12 Tf
+100 490 Td
+(Location: /public/resume.pdf) Tj
+ET
+endstream
+endobj
+xref
+0 5
+0000000000 65535 f
+0000000015 00000 n
+0000000074 00000 n
+0000000131 00000 n
+0000000380 00000 n
+trailer
+<<
+/Size 5
+/Root 1 0 R
+>>
+startxref
+931
+%%EOF
