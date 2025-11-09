@@ -61,17 +61,100 @@ This project uses a **serverless + edge-first architecture** deployed on **Verce
 
 ---
 
+## 🛠️ Initial Setup (One-Time)
+
+### Prerequisites
+
+These commands were used to set up the development environment from scratch:
+
+```bash
+# 1. Install Node.js (includes npm and npx)
+brew install node
+
+# Verify installation
+node --version  # v25.1.0
+npm --version   # 11.6.2
+npx --version   # 11.6.2
+```
+
+### Create Next.js Project
+
+```bash
+# Navigate to your workspace
+cd /Users/robertdelacruz/Personal_Website
+
+# Create Next.js app with TypeScript, ESLint, Tailwind, App Router
+npx create-next-app@latest robertdelacruz.com \
+  --typescript \
+  --eslint \
+  --tailwind \
+  --app \
+  --src-dir \
+  --import-alias "@/*"
+
+# Configuration choices made:
+# - TypeScript: Yes
+# - ESLint: Yes
+# - Tailwind CSS: Yes
+# - App Router: Yes
+# - src/ directory: Yes
+# - Import alias (@/*): Yes (default)
+# - Turbopack: Yes (for faster dev server)
+```
+
+### Optional: Install pnpm (Faster Alternative to npm)
+
+```bash
+# Install pnpm globally
+npm install -g pnpm
+
+# Remove npm files and reinstall with pnpm
+cd robertdelacruz.com
+rm -rf node_modules package-lock.json
+pnpm install
+
+# Use pnpm commands going forward:
+# pnpm dev, pnpm build, pnpm start, etc.
+```
+
+### GitHub Setup
+
+```bash
+# Authenticate with GitHub CLI
+gh auth login
+# Follow prompts: GitHub.com → HTTPS → Login with web browser
+
+# Create repository and push code
+cd robertdelacruzwebsite
+gh repo create PersonalWebsite --public --source=. --remote=origin --push
+```
+
+### Optional: Git Aliases
+
+```bash
+# Add useful git alias for viewing commit history
+git config --global alias.dag "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --all"
+
+# Usage: git dag
+```
+
+---
+
 ## 🧰 Development Setup
 
 ```bash
 # 1. Clone repo
-git clone https://github.com/robertdelacruz/portfolio.git
-cd portfolio
+git clone https://github.com/Robert-dlcrz/PersonalWebsite.git
+cd PersonalWebsite
 
 # 2. Install dependencies
+npm install
+# or if using pnpm:
 pnpm install
 
 # 3. Run locally
+npm run dev
+# or if using pnpm:
 pnpm dev
 
 # 4. Deploy to Vercel
