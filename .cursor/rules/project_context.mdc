@@ -1,0 +1,78 @@
+---
+alwaysApply: true
+---
+
+# robertdelacruz.com
+
+A personal portfolio and software engineering showcase for Robert De La Cruz.  
+Built for simplicity today, designed for scalability tomorrow.
+
+This document outlines the high-level purpose and plan from the inception of the project. Details are subject to change and should be updated accordingly.
+
+---
+
+## 🧱 Architecture Overview
+
+This project follows a modern **serverless + edge architecture** designed for performance, simplicity, and extensibility.
+
+### High-Level Design
+This project uses a **serverless + edge-first architecture** deployed on **Vercel**, designed for simplicity, speed, and scalability.
+
+---
+
+## ⚙️ Tech Stack
+
+| Layer | Technology | Purpose |
+|--------|-------------|----------|
+| **Language** | **TypeScript** | Type-safe JavaScript for scalable web development |
+| **Framework** | **Next.js** | React-based full-stack framework (SSG + SSR + API routes) |
+| **Styling** | **TailwindCSS** | Utility-first CSS framework for responsive design |
+| **Deployment** | **Vercel** | Serverless platform with global CDN and automatic scaling |
+| **Backend** | **Vercel Functions (Serverless)** | Lightweight API endpoints without managing servers |
+| **Database (future)** | **Supabase** or **DynamoDB** | Optional serverless data layer for dynamic content |
+| **Testing** | **Jest + React Testing Library** | Unit and component testing |
+| **Linting / Formatting** | **ESLint + Prettier** | Consistent and clean codebase |
+| **Analytics (optional)** | **Vercel Analytics / Plausible** | Privacy-friendly site analytics |
+
+---
+
+## 🚀 Key Features
+
+- **Blazing-fast static rendering** with incremental builds  
+- **Serverless APIs** for contact forms, integrations, and automation  
+- **Global CDN caching** via Vercel Edge Network  
+- **Scalable foundation** to add features like:
+  - Blog or CMS (e.g., Contentlayer / Sanity)
+  - Auth or user dashboard
+  - AWS or AI integrations (Lambda / Bedrock)
+- **Low-cost hosting** with transparent scaling
+
+---
+
+## 🧩 Future Extensions
+
+| Area | Example Addition | Integration Path |
+|------|------------------|------------------|
+| **Data Layer** | Project CMS / Blog | Supabase or DynamoDB |
+| **Auth** | Personal admin login | NextAuth.js |
+| **Backend Services** | AI demos / API tools | AWS Lambda or Bedrock endpoints |
+| **Monitoring** | Uptime / metrics | Vercel Observability or CloudWatch |
+| **Infrastructure as Code** | AWS CDK / Terraform | For hybrid AWS integration |
+
+---
+
+## 🧰 Development Setup
+
+```bash
+# 1. Clone repo
+git clone https://github.com/robertdelacruz/portfolio.git
+cd portfolio
+
+# 2. Install dependencies
+pnpm install
+
+# 3. Run locally
+pnpm dev
+
+# 4. Deploy to Vercel
+vercel --prod
