@@ -1,8 +1,12 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeftIcon, GlobeAltIcon, MapPinIcon, HomeIcon } from '@heroicons/react/24/outline';
-import { INTERESTS_CONTENT, ADVENTURES } from '@/constants/content';
+import { INTERESTS_CONTENT } from '@/constants/content';
+import { tripService } from '@/service/tripService';
 
-export default function Interests() {
+export default async function Interests() {
+  const trips = await tripService.fetchTripSummaries();
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-50 via-green-50 to-blue-50 dark:from-slate-900 dark:via-green-950 dark:to-blue-950">
       {/* Header */}
@@ -35,35 +39,43 @@ export default function Interests() {
 
           {/* Adventures Grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-            {ADVENTURES.map((adventure) => (
-              <div
-                key={adventure.id}
-                className="group bg-white dark:bg-slate-800 rounded-2xl shadow-lg hover:shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden transform hover:scale-105 transition-all duration-300"
+            {trips.map((trip) => (
+              <Link
+                key={`${trip.year}-${trip.slug}`}
+                href={`/interests/${trip.year}/${trip.slug}`}
+                aria-label={`View details about ${trip.title}`}
+                className="group bg-white dark:bg-slate-800 rounded-2xl shadow-lg hover:shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden transform hover:scale-105 transition-all duration-300 focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-400/50"
               >
-                {/* Image Placeholder */}
-                <div className="h-48 bg-gradient-to-br from-green-400 via-blue-500 to-purple-500 flex items-center justify-center text-6xl">
-                  {adventure.image}
+                <div className="relative h-48 w-full overflow-hidden">
+                  <Image
+                    src={trip.coverPhotoUrl}
+                    alt={`${trip.title} cover`}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                    sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                  />
                 </div>
-                
-                {/* Content */}
-                <div className="p-6">
-                  <div className="flex items-start justify-between mb-2">
-                    <h3 className="text-xl font-semibold text-slate-800 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                      {adventure.title}
-                    </h3>
+
+                <div className="p-6 space-y-3">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="text-sm text-blue-600 dark:text-blue-400 font-semibold">
+                        {trip.month} {trip.year}
+                      </p>
+                      <h3 className="text-xl font-semibold text-slate-800 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                        {trip.title}
+                      </h3>
+                    </div>
                   </div>
-                  <p className="text-sm text-blue-600 dark:text-blue-400 font-medium mb-1 flex items-center gap-1">
+                  <p className="text-sm text-blue-600 dark:text-blue-400 font-medium flex items-center gap-1">
                     <MapPinIcon className="h-4 w-4" />
-                    {adventure.location}
-                  </p>
-                  <p className="text-sm text-slate-500 dark:text-slate-400 mb-3">
-                    {adventure.date}
+                    {trip.location}
                   </p>
                   <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
-                    {adventure.description}
+                    {trip.description}
                   </p>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
 

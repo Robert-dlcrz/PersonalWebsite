@@ -85,58 +85,6 @@ export const INTERESTS_CONTENT = {
   },
 } as const;
 
-// Sample adventure data - replace with real data later
-export const ADVENTURES = [
-  {
-    id: 1,
-    title: 'Mountain Hiking in the Alps',
-    location: 'Swiss Alps, Switzerland',
-    date: 'Summer 2024',
-    description: 'An unforgettable journey through breathtaking mountain trails, pristine lakes, and charming alpine villages.',
-    image: '🏔️',
-  },
-  {
-    id: 2,
-    title: 'Coastal Road Trip',
-    location: 'Pacific Coast Highway, California',
-    date: 'Spring 2024',
-    description: 'Cruising along the stunning California coastline, from San Francisco to San Diego, discovering hidden beaches and scenic viewpoints.',
-    image: '🌊',
-  },
-  {
-    id: 3,
-    title: 'Urban Exploration',
-    location: 'Tokyo, Japan',
-    date: 'Fall 2023',
-    description: 'Immersing in the vibrant culture, incredible food scene, and the perfect blend of tradition and modernity.',
-    image: '🗼',
-  },
-  {
-    id: 4,
-    title: 'Desert Adventures',
-    location: 'Sedona, Arizona',
-    date: 'Winter 2023',
-    description: 'Exploring red rock formations, hiking through canyons, and witnessing some of the most spectacular sunsets.',
-    image: '🏜️',
-  },
-  {
-    id: 5,
-    title: 'Island Paradise',
-    location: 'Hawaiian Islands',
-    date: 'Summer 2023',
-    description: 'Surfing, snorkeling, and soaking up the aloha spirit across multiple islands, each with its own unique charm.',
-    image: '🏝️',
-  },
-  {
-    id: 6,
-    title: 'National Parks Tour',
-    location: 'Utah & Arizona',
-    date: 'Spring 2023',
-    description: "Road tripping through Zion, Bryce Canyon, and the Grand Canyon - nature's most impressive masterpieces.",
-    image: '🏕️',
-  },
-] as const;
-
 // ============================================
 // MUSIC PAGE CONTENT
 // ============================================

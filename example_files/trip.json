@@ -1,0 +1,15 @@
+{
+    "title": "New York City",
+    "slug": "new_york",
+    "year": 2024,
+    "month": "October",
+    "location": "New York, USA",
+    "description": "Exploring New York City and Brooklyn.",
+    "dateRange": {
+      "start": "2024-10-15",
+      "end": "2024-10-20"
+    },
+    "tags": ["city", "sunset", "skyline"],
+    "photosPath": "trips/2024/new_york/photos",
+    "heroPhoto": "trips/2024/new_york/photos/cover.jpg"
+}
