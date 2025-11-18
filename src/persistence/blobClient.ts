@@ -22,6 +22,9 @@ export class BlobClient {
   }
 
   async listBlobs(prefix: string): Promise<ListBlobResult> {
-    return list({ prefix });
+    return list({ 
+      prefix,
+      token: process.env.ROBDLC_PERSONAL_WEBSITE_READ_WRITE_TOKEN 
+    });
   }
 }
