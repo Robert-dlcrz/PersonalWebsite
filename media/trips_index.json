@@ -7,5 +7,14 @@
       "location": "New York, USA",
       "description": "Exploring New York City and Brooklyn",
       "photosPath": "trips/2024/new_york/photos"
+    },
+    {
+      "year": 2025,
+      "month": "February",
+      "slug": "hawaii",
+      "title": "Hawaii",
+      "location": "Hawaii, USA",
+      "description": "Winter Vibe in Hawaii",
+      "photosPath": "trips/2025/hawaii/photos"
     }
 ]

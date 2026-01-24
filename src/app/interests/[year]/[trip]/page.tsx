@@ -4,16 +4,28 @@ import { notFound } from 'next/navigation';
 import { ArrowLeftIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import { tripService } from '@/service/tripService';
 
-type TripPageProps = {
-  params: Promise<{
-    year: string;
-    trip: string;
-  }>;
-};
+/**
+ * Next.js Route Segment Config: dynamicParams
+ *
+ * When using generateStaticParams(), Next.js pre-generates pages at build time.
+ * By default, routes not returned by generateStaticParams would 404.
+ *
+ * Setting dynamicParams = true allows on-demand rendering for routes that weren't
+ * pre-generated (e.g., trips added to Vercel Blob after deployment).
+ *
+ * Trade-off: First request to a new trip has slight latency (SSR), but subsequent
+ * requests are cached. This enables adding trips without code redeployment.
+ *
+ * @see https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#dynamicparams
+ */
+export const dynamicParams = true;
 
 /**
  * Next.js uses this to pre-generate the `/interests/[year]/[trip]` routes at build time.
  * It enumerates all known trips so the App Router can statically render or cache them ahead of requests.
+ *
+ * Even with dynamicParams = true, we keep this for performance: known trips get instant
+ * CDN delivery (~50ms) vs on-demand SSR (~200-500ms). New trips still work via dynamicParams.
  */
 export async function generateStaticParams() {
   const trips = await tripService.fetchTripSummaries();
@@ -22,6 +34,13 @@ export async function generateStaticParams() {
     trip: trip.slug,
   }));
 }
+
+type TripPageProps = {
+  params: Promise<{
+    year: string;
+    trip: string;
+  }>;
+};
 
 export default async function TripDetailPage({ params }: TripPageProps) {
   const { year, trip } = await params;
