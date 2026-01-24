@@ -1,0 +1,15 @@
+{
+    "title": "Hawaii",
+    "slug": "hawaii",
+    "year": 2025,
+    "month": "February",
+    "location": "Hawaii, USA",
+    "description": "Winter Vibe in Hawaii",
+    "dateRange": {
+      "start": "2025-02-20",
+      "end": "2025-02-25"
+    },
+    "tags": ["city", "beach", "tropical"],
+    "photosPath": "trips/2025/hawaii/photos",
+    "heroPhoto": "trips/2025/hawaii/photos/cover.jpg"
+}
