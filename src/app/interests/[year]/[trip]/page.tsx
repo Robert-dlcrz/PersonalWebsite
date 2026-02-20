@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeftIcon, MapPinIcon } from '@heroicons/react/24/outline';
+import { TripPhotoGallery } from '@/components/TripPhotoGallery';
 import { tripService } from '@/service/tripService';
 
 /**
@@ -42,6 +43,28 @@ type TripPageProps = {
   }>;
 };
 
+type GalleryPhoto = {
+  pathname: string;
+  url: string;
+};
+
+/**
+ * Module-private helper: normalize `photosPath` so cover-photo matching is reliable
+ * whether the path comes in with or without a trailing slash.
+ * Example: `trips/2025/hawaii/photos/` and `trips/2025/hawaii/photos`
+ * both map to `trips/2025/hawaii/photos/cover.jpg`.
+ */
+function buildCoverPathname(photosPath: string): string {
+  const normalizedPhotosPath = photosPath.replace(/\/$/, '');
+  return `${normalizedPhotosPath}/cover.jpg`;
+}
+
+function buildGalleryPhotos(photos: GalleryPhoto[], photosPath: string): GalleryPhoto[] {
+  const coverPathname = buildCoverPathname(photosPath);
+
+  return photos.filter((photo) => photo.pathname !== coverPathname);
+}
+
 export default async function TripDetailPage({ params }: TripPageProps) {
   const { year, trip } = await params;
 
@@ -53,6 +76,13 @@ export default async function TripDetailPage({ params }: TripPageProps) {
   }
 
   const photos = await tripService.fetchTripPhotos(tripDetail);
+  const galleryPhotos = buildGalleryPhotos(
+    photos.map((photo) => ({
+      pathname: photo.pathname,
+      url: photo.url,
+    })),
+    tripDetail.photosPath,
+  );
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
@@ -98,23 +128,8 @@ export default async function TripDetailPage({ params }: TripPageProps) {
 
             <p className="text-lg text-slate-700 dark:text-slate-200 leading-relaxed">{tripDetail.description}</p>
 
-            {photos.length > 0 && (
-              <div className="pt-6 border-t border-slate-200 dark:border-slate-800">
-                <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-4">Photo Highlights</h2>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  {photos.map((photo) => (
-                    <div key={photo.pathname} className="relative h-56 w-full overflow-hidden rounded-2xl">
-                      <Image
-                        src={photo.url}
-                        alt={`${tripDetail.title} photo`}
-                        fill
-                        className="object-cover"
-                        sizes="(min-width: 768px) 50vw, 100vw"
-                      />
-                    </div>
-                  ))}
-                </div>
-              </div>
+            {galleryPhotos.length > 0 && (
+              <TripPhotoGallery tripTitle={tripDetail.title} photos={galleryPhotos} />
             )}
           </div>
         </article>
