@@ -49,9 +49,11 @@ If this is not the intended profile, replace the URL in `src/constants/content.t
 
 ## Maintenance follow-up
 
-- `pnpm audit`: pending
-- Dependency freshness review: pending
-- Vercel security settings review: pending
+- `pnpm audit`: partially remediated. The direct production-facing Next.js advisory was addressed by upgrading `next` from `16.0.10` to `16.1.6`.
+- Remaining `pnpm audit` findings are currently in the local ESLint toolchain only (`eslint` transitive dependencies such as `minimatch`, `flatted`, `js-yaml`, and `ajv`), not in the shipped runtime bundle.
+- Dependency freshness review: completed for the security-sensitive framework packages. `next`, `eslint-config-next`, `react`, `react-dom`, `@vercel/blob`, `@types/react`, and `@types/react-dom` were updated.
+- Remaining outdated packages are non-blocking for this task: `tailwindcss`, `@tailwindcss/postcss`, `@types/node`, and `eslint`.
+- Vercel security settings review: code-side follow-up documented below; dashboard-side confirmation is still manual.
 
 Recommended Vercel settings to confirm manually:
 
