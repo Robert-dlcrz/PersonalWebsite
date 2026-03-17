@@ -34,18 +34,16 @@ The policy is intentionally strict on remote origins and permissive only where t
 
 If you want a stricter production CSP later, move CSP generation to middleware and add per-request nonces for scripts/styles. That would allow removal of `'unsafe-inline'` from `script-src`.
 
-## SoundCloud URL assumption
+## SoundCloud URL note
 
-The placeholder `https://soundcloud.com` was replaced with:
+The SoundCloud link is intentionally set to the generic homepage:
 
-- `https://soundcloud.com/robert-dela-cruz-465324732`
+- `https://soundcloud.com`
 
 Reasoning:
 
-- Public search results matched this profile most closely to the site owner name, "Robert De La Cruz".
-- No more authoritative SoundCloud URL existed in the repository.
-
-If this is not the intended profile, replace the URL in `src/constants/content.ts`.
+- There is no personal SoundCloud profile to link to yet.
+- Using the homepage avoids shipping a guessed or incorrect profile URL.
 
 ## Maintenance follow-up
 
