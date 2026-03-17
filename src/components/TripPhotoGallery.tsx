@@ -53,7 +53,7 @@ export function TripPhotoGallery({ tripTitle, photos }: TripPhotoGalleryProps) {
             key={photo.pathname}
             type="button"
             aria-label={`Open photo ${index + 1} of ${photos.length} from ${tripTitle}`}
-            className="group relative h-56 w-full cursor-pointer overflow-hidden rounded-2xl shadow-sm transition-all duration-300 hover:scale-[1.01] hover:shadow-lg focus:outline-none focus-visible:scale-[1.01] focus-visible:ring-4 focus-visible:ring-blue-400/60"
+            className="group relative h-96 w-full cursor-pointer overflow-hidden rounded-2xl shadow-sm transition-all duration-300 hover:scale-[1.01] hover:shadow-lg focus:outline-none focus-visible:scale-[1.01] focus-visible:ring-4 focus-visible:ring-blue-400/60"
             onClick={() => openAtIndex(index)}
             ref={(element) => {
               buttonRefs.current[index] = element;
