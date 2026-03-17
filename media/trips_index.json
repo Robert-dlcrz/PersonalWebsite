@@ -1,20 +1,65 @@
 [
-    {
-      "year": 2024,
-      "month": "October",
-      "slug": "new_york",
-      "title": "New York City",
-      "location": "New York, USA",
-      "description": "Exploring New York City and Brooklyn",
-      "photosPath": "trips/2024/new_york/photos"
-    },
-    {
-      "year": 2025,
-      "month": "February",
-      "slug": "hawaii",
-      "title": "Hawaii",
-      "location": "Hawaii, USA",
-      "description": "Winter Vibe in Hawaii",
-      "photosPath": "trips/2025/hawaii/photos"
-    }
+  {
+    "year": 2026,
+    "month": "February",
+    "slug": "mexico_city",
+    "title": "Mexico City",
+    "location": "Mexico City, MX",
+    "description": "Another great trip to CDMX",
+    "photosPath": "trips/2026/mexico_city/photos"
+  },
+  {
+    "year": 2025,
+    "month": "August",
+    "slug": "chicago",
+    "title": "Chicago",
+    "location": "Chicago, USA",
+    "description": "Lollapalooza and exploring Chicago",
+    "photosPath": "trips/2025/chicago/photos"
+  },
+  {
+    "year": 2025,
+    "month": "August",
+    "slug": "portugal",
+    "title": "Portugal",
+    "location": "Lisbon, Portugal",
+    "description": "Exploring Lisbon and surrounding areas",
+    "photosPath": "trips/2025/portugal/photos"
+  },
+  {
+    "year": 2025,
+    "month": "August",
+    "slug": "london",
+    "title": "London",
+    "location": "London, UK",
+    "description": "A few days in London, and meeting Mariah Carey",
+    "photosPath": "trips/2025/london/photos"
+  },
+  {
+    "year": 2025,
+    "month": "April",
+    "slug": "coachella",
+    "title": "Coachella",
+    "location": "Coachella, USA",
+    "description": "First timer at Coachella",
+    "photosPath": "trips/2025/coachella/photos"
+  },
+  {
+    "year": 2025,
+    "month": "February",
+    "slug": "hawaii",
+    "title": "Hawaii",
+    "location": "Hawaii, USA",
+    "description": "Winter Vibe in Hawaii",
+    "photosPath": "trips/2025/hawaii/photos"
+  },
+  {
+    "year": 2024,
+    "month": "October",
+    "slug": "new_york",
+    "title": "New York City",
+    "location": "New York, USA",
+    "description": "Exploring New York City and Brooklyn",
+    "photosPath": "trips/2024/new_york/photos"
+  }
 ]

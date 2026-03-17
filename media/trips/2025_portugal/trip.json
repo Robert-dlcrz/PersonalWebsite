@@ -1,0 +1,20 @@
+{
+  "title": "Portugal",
+  "slug": "portugal",
+  "year": 2025,
+  "month": "August",
+  "location": "Lisbon, Portugal",
+  "description": "Exploring Lisbon and surrounding areas",
+  "dateRange": {
+    "start": "2025-08-05",
+    "end": "2025-08-08"
+  },
+  "photosPath": "trips/2025/portugal/photos",
+  "heroPhoto": "trips/2025/portugal/photos/cover.jpg",
+  "tags": [
+    "travel",
+    "city",
+    "food",
+    "explore"
+  ]
+}

@@ -7,6 +7,8 @@ description: Guide for adding new trips to the personal website. Use when onboar
 
 Complete guide for adding new trips to robertdelacruz.com.
 
+Use `pnpm trip:onboard` for the actual new-trip workflow. Keep this skill as the quick reference for what the script is doing behind the scenes and for troubleshooting if something does not appear correctly.
+
 ## Prerequisites
 
 - Photos converted to JPG (not HEIC)

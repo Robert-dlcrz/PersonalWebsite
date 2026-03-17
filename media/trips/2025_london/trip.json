@@ -1,0 +1,21 @@
+{
+  "title": "London",
+  "slug": "london",
+  "year": 2025,
+  "month": "August",
+  "location": "London, UK",
+  "description": "A few days in London, and meeting Mariah Carey",
+  "dateRange": {
+    "start": "2025-08-09",
+    "end": "2025-08-11"
+  },
+  "photosPath": "trips/2025/london/photos",
+  "heroPhoto": "trips/2025/london/photos/cover.jpg",
+  "tags": [
+    "city",
+    "food",
+    "celebrity",
+    "explore",
+    "travel"
+  ]
+}

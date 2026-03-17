@@ -1,0 +1,19 @@
+{
+  "title": "Mexico City",
+  "slug": "mexico_city",
+  "year": 2026,
+  "month": "February",
+  "location": "Mexico City, MX",
+  "description": "Another great trip to CDMX",
+  "dateRange": {
+    "start": "2026-03-04",
+    "end": "2026-03-08"
+  },
+  "photosPath": "trips/2026/mexico_city/photos",
+  "heroPhoto": "trips/2026/mexico_city/photos/cover.jpg",
+  "tags": [
+    "city",
+    "food",
+    "exploring"
+  ]
+}
