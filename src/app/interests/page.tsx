@@ -46,7 +46,7 @@ export default async function Interests() {
                 aria-label={`View details about ${trip.title}`}
                 className="group bg-white dark:bg-slate-800 rounded-2xl shadow-lg hover:shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden transform hover:scale-105 transition-all duration-300 focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-400/50"
               >
-                <div className="relative h-48 w-full overflow-hidden">
+                <div className="relative h-96 w-full overflow-hidden">
                   <Image
                     src={trip.coverPhotoUrl}
                     alt={`${trip.title} cover`}
