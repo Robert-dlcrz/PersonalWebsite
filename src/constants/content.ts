@@ -93,7 +93,7 @@ export const MUSIC_CONTENT = {
     title: 'Music & Sounds',
     subtitle: 'Music is the soundtrack to life. Explore my curated playlists and discover the sounds that inspire me daily.',
     soundcloudButton: 'Follow on SoundCloud',
-    soundcloudUrl: 'https://soundcloud.com', // Update with real URL
+    soundcloudUrl: 'https://soundcloud.com',
   },
   backToHome: 'Back to Home',
   about: {

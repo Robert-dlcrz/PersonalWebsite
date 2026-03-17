@@ -124,6 +124,5 @@ export const tripService =
   globalWithTripService[TRIP_SERVICE_KEY] ?? (globalWithTripService[TRIP_SERVICE_KEY] = new TripService());
 
 declare global {
-  // eslint-disable-next-line no-var
   var __tripService: TripService | undefined;
 }
