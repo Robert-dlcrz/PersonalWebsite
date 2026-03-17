@@ -1,0 +1,21 @@
+{
+  "title": "Coachella",
+  "slug": "coachella",
+  "year": 2025,
+  "month": "April",
+  "location": "Coachella, USA",
+  "description": "First timer at Coachella",
+  "dateRange": {
+    "start": "2025-04-11",
+    "end": "2025-04-14"
+  },
+  "photosPath": "trips/2025/coachella/photos",
+  "heroPhoto": "trips/2025/coachella/photos/cover.jpg",
+  "tags": [
+    "concert",
+    "music",
+    "desert",
+    "food",
+    "coachella"
+  ]
+}

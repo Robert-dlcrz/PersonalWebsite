@@ -1,0 +1,20 @@
+{
+  "title": "Chicago",
+  "slug": "chicago",
+  "year": 2025,
+  "month": "August",
+  "location": "Chicago, USA",
+  "description": "Lollapalooza and exploring Chicago",
+  "dateRange": {
+    "start": "2025-07-30",
+    "end": "2025-08-04"
+  },
+  "photosPath": "trips/2025/chicago/photos",
+  "heroPhoto": "trips/2025/chicago/photos/cover.jpg",
+  "tags": [
+    "city",
+    "festival",
+    "concert",
+    "food"
+  ]
+}
