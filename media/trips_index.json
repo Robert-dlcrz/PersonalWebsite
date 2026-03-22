@@ -11,11 +11,11 @@
   {
     "year": 2025,
     "month": "August",
-    "slug": "chicago",
-    "title": "Chicago",
-    "location": "Chicago, USA",
-    "description": "Lollapalooza and exploring Chicago",
-    "photosPath": "trips/2025/chicago/photos"
+    "slug": "london",
+    "title": "London",
+    "location": "London, UK",
+    "description": "A few days in London, and meeting Mariah Carey",
+    "photosPath": "trips/2025/london/photos"
   },
   {
     "year": 2025,
@@ -29,11 +29,11 @@
   {
     "year": 2025,
     "month": "August",
-    "slug": "london",
-    "title": "London",
-    "location": "London, UK",
-    "description": "A few days in London, and meeting Mariah Carey",
-    "photosPath": "trips/2025/london/photos"
+    "slug": "chicago",
+    "title": "Chicago",
+    "location": "Chicago, USA",
+    "description": "Lollapalooza and exploring Chicago",
+    "photosPath": "trips/2025/chicago/photos"
   },
   {
     "year": 2025,
