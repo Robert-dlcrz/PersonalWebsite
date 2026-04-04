@@ -44,8 +44,8 @@ export function TripPhotoGallery({ tripTitle, photos }: TripPhotoGalleryProps) {
   };
 
   return (
-    <div className="pt-6 border-t border-slate-200 dark:border-slate-800">
-      <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-4">Photo Highlights</h2>
+    <div className="border-t border-foreground/15 pt-6">
+      <h2 className="mb-4 text-2xl font-semibold text-foreground">Photo Highlights</h2>
 
       <div className="grid gap-4 sm:grid-cols-2">
         {photos.map((photo, index) => (
@@ -53,7 +53,7 @@ export function TripPhotoGallery({ tripTitle, photos }: TripPhotoGalleryProps) {
             key={photo.pathname}
             type="button"
             aria-label={`Open photo ${index + 1} of ${photos.length} from ${tripTitle}`}
-            className="group relative h-96 w-full cursor-pointer overflow-hidden rounded-2xl shadow-sm transition-all duration-300 hover:scale-[1.01] hover:shadow-lg focus:outline-none focus-visible:scale-[1.01] focus-visible:ring-4 focus-visible:ring-blue-400/60"
+            className="group relative aspect-[5/6] w-full cursor-pointer overflow-hidden rounded-2xl bg-foreground/5 shadow-sm transition-all duration-300 hover:scale-[1.01] hover:shadow-lg focus:outline-none focus-visible:scale-[1.01] focus-visible:ring-4 focus-visible:ring-foreground/25"
             onClick={() => openAtIndex(index)}
             ref={(element) => {
               buttonRefs.current[index] = element;
@@ -63,8 +63,8 @@ export function TripPhotoGallery({ tripTitle, photos }: TripPhotoGalleryProps) {
               src={photo.url}
               alt={`${tripTitle} photo ${index + 1}`}
               fill
-              className="object-cover transition-transform duration-300 group-hover:scale-105 group-focus-visible:scale-105"
-              sizes="(min-width: 768px) 50vw, 100vw"
+              className="object-cover object-center transition-transform duration-300 group-hover:scale-105 group-focus-visible:scale-105"
+              sizes="(min-width: 768px) 45vw, 100vw"
             />
           </button>
         ))}
