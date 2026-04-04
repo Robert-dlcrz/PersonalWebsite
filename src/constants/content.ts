@@ -94,13 +94,9 @@ export const NAVIGATION_CARDS = [
 export const INTERESTS_CONTENT = {
   hero: {
     title: 'Travel & Adventures',
-    subtitle: "Life is about the journey, not just the destination. Here are some of my favorite adventures and the incredible places I've explored.",
-  },
-  backToHome: 'Back to Home',
-  cta: {
-    title: 'More Adventures Coming Soon!',
-    description: 'This is just the beginning. Follow along as I continue to explore new destinations and create more unforgettable memories.',
-    buttonText: 'Back to Home',
+    compactTitle: 'Travel',
+    mediumLineOne: 'Travel &',
+    mediumLineTwo: 'Adventures',
   },
 } as const;
 
