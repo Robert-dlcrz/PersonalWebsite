@@ -1,24 +1,11 @@
 import Link from 'next/link';
-import { ArrowLeftIcon, MusicalNoteIcon, PlayCircleIcon, ArrowTopRightOnSquareIcon, HomeIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
+import { MusicalNoteIcon, PlayCircleIcon, ArrowTopRightOnSquareIcon, HomeIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 import { MUSIC_CONTENT, PLAYLISTS } from '@/constants/content';
 
 export default function Music() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-pink-50 dark:from-slate-900 dark:via-purple-950 dark:to-pink-950">
-      {/* Header */}
-      <div className="border-b border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm sticky top-0 z-10">
-        <div className="container mx-auto px-6 py-4">
-          <Link 
-            href="/" 
-            className="inline-flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
-          >
-            <ArrowLeftIcon className="h-5 w-5" />
-            {MUSIC_CONTENT.backToHome}
-          </Link>
-        </div>
-      </div>
-
       {/* Hero Section */}
       <div className="container mx-auto px-6 py-16">
         <div className="max-w-6xl mx-auto">

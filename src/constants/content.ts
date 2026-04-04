@@ -4,7 +4,11 @@
 // All text content for the website in one place
 // Makes it easy to update content without touching UI code
 
-import { GlobeAltIcon, MusicalNoteIcon } from '@heroicons/react/24/outline';
+import {
+  GlobeAltIcon,
+  MusicalNoteIcon,
+  UserIcon,
+} from '@heroicons/react/24/outline';
 
 // ============================================
 // PERSONAL INFO
@@ -48,11 +52,21 @@ export const HOME_CONTENT = {
 // ============================================
 export const NAVIGATION_CARDS = [
   {
+    id: 'about',
+    href: '/interests',
+    icon: UserIcon,
+    gradientClasses: 'from-gray-900 to-black',
+    title: 'About Me',
+    description: 'Learn more about my background, experience, and what drives me.',
+    ctaText: 'Read More',
+    accentColor: 'text-slate-900 dark:text-slate-100',
+  },
+  {
     id: 'interests',
     href: '/interests',
     icon: GlobeAltIcon,
     gradientClasses: 'from-green-400 to-blue-500',
-    title: 'Travel & Adventures',
+    title: 'Travel',
     description: 'Explore my journey around the world. From mountain peaks to hidden gems, discover the places I\'ve been and the adventures I\'ve had.',
     ctaText: 'View Adventures',
     accentColor: 'text-blue-600 dark:text-blue-400',
@@ -62,7 +76,7 @@ export const NAVIGATION_CARDS = [
     href: '/music',
     icon: MusicalNoteIcon,
     gradientClasses: 'from-purple-400 to-pink-500',
-    title: 'Music & Sounds',
+    title: 'Music',
     description: 'Dive into my musical world. Check out my favorite tracks, playlists, and connect with me on SoundCloud to explore the sounds that inspire me.',
     ctaText: 'Explore Music',
     accentColor: 'text-purple-600 dark:text-purple-400',
