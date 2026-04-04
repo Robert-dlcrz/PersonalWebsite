@@ -15,8 +15,6 @@ export function NavigationCard({
   gradientClasses,
   icon,
   title,
-  description,
-  ctaText,
 }: NavigationCardProps) {
   return (
     <Link href={href} className="group block">
@@ -30,12 +28,6 @@ export function NavigationCard({
       </div>
       <div className="pt-4 pb-2">
         <h3 className="text-lg font-medium text-foreground">{title}</h3>
-        <p className="text-sm text-foreground/60 mt-1 leading-relaxed">
-          {description}
-        </p>
-        <span className="inline-block text-sm font-medium text-foreground/80 mt-2 group-hover:underline transition-all">
-          {ctaText} &rarr;
-        </span>
       </div>
     </Link>
   );

@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-import { PERSONAL_INFO, HOME_CONTENT } from '@/constants/content';
+import { PERSONAL_INFO } from '@/constants/content';
 
 const navLinkClass =
   'text-xs font-medium uppercase tracking-widest text-foreground/70 hover:text-foreground transition-colors';
@@ -19,23 +19,19 @@ export function Navbar() {
           className="text-sm font-medium text-foreground hover:opacity-80 transition-opacity"
           onClick={() => setMenuOpen(false)}
         >
-          {PERSONAL_INFO.name}
+          {PERSONAL_INFO.title}
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex" aria-label="Main">
           <Link href="/interests" className={navLinkClass}>
-            Interests
+            About
+          </Link>
+          <Link href="/interests" className={navLinkClass}>
+            Travel
           </Link>
           <Link href="/music" className={navLinkClass}>
             Music
           </Link>
-          <a
-            href="/resume.pdf"
-            download
-            className={navLinkClass}
-          >
-            Resume
-          </a>
         </nav>
 
         <button
@@ -65,7 +61,14 @@ export function Navbar() {
             className={navLinkClass}
             onClick={() => setMenuOpen(false)}
           >
-            Interests
+            About
+          </Link>
+          <Link
+            href="/interests"
+            className={navLinkClass}
+            onClick={() => setMenuOpen(false)}
+          >
+            Travel
           </Link>
           <Link
             href="/music"
@@ -74,14 +77,6 @@ export function Navbar() {
           >
             Music
           </Link>
-          <a
-            href="/resume.pdf"
-            download
-            className={navLinkClass}
-            onClick={() => setMenuOpen(false)}
-          >
-            {HOME_CONTENT.resumeButton}
-          </a>
         </nav>
       ) : null}
     </header>
