@@ -13,7 +13,7 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-foreground/10 bg-background/95 backdrop-blur-sm">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-4 md:px-12 lg:px-20">
+      <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-6 py-4 md:px-10 lg:px-12">
         <Link
           href="/"
           className="text-sm font-medium text-foreground hover:opacity-80 transition-opacity"
@@ -57,7 +57,7 @@ export function Navbar() {
       {menuOpen ? (
         <nav
           id="mobile-nav"
-          className="flex flex-col gap-4 border-t border-foreground/10 px-6 py-4 md:hidden"
+          className="mx-auto flex w-full max-w-7xl flex-col gap-4 border-t border-foreground/10 px-6 py-4 md:hidden md:px-10 lg:px-12"
           aria-label="Mobile main"
         >
           <Link
