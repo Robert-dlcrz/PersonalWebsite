@@ -22,7 +22,7 @@ export function HomeHeroTitle() {
       initial={titleInitial}
       animate={{ opacity: 1, y: 0 }}
       transition={titleTransition}
-      className="font-[family-name:var(--font-display)] text-foreground text-center md:text-left"
+      className="font-[family-name:var(--font-display)] text-foreground text-left"
     >
       <span className="hidden min-[1180px]:block whitespace-nowrap text-[clamp(4.8rem,10.6vw,14rem)] leading-[0.88] tracking-[-0.07em]">
         {PERSONAL_INFO.name}
