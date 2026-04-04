@@ -21,7 +21,7 @@ export function NavigationCard({
   return (
     <Link href={href} className="group block">
       <div
-        className={`relative aspect-[4/3] w-full bg-gradient-to-br ${gradientClasses} flex items-center justify-center overflow-hidden`}
+        className={`relative aspect-[3/2] w-full bg-gradient-to-br ${gradientClasses} flex items-center justify-center overflow-hidden`}
       >
         <div className="transition-transform duration-500 group-hover:scale-110">
           {icon}

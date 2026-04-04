@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowLeftIcon, GlobeAltIcon, MapPinIcon, HomeIcon } from '@heroicons/react/24/outline';
+import { GlobeAltIcon, MapPinIcon, HomeIcon } from '@heroicons/react/24/outline';
 import { INTERESTS_CONTENT } from '@/constants/content';
 import { tripService } from '@/service/tripService';
 
@@ -9,19 +9,6 @@ export default async function Interests() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-50 via-green-50 to-blue-50 dark:from-slate-900 dark:via-green-950 dark:to-blue-950">
-      {/* Header */}
-      <div className="border-b border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm sticky top-0 z-10">
-        <div className="container mx-auto px-6 py-4">
-          <Link 
-            href="/" 
-            className="inline-flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-          >
-            <ArrowLeftIcon className="h-5 w-5" />
-            {INTERESTS_CONTENT.backToHome}
-          </Link>
-        </div>
-      </div>
-
       {/* Hero Section */}
       <div className="container mx-auto px-6 py-16">
         <div className="max-w-6xl mx-auto">

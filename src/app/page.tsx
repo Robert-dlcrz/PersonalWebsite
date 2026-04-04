@@ -22,25 +22,25 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-background text-foreground">
       {/* Hero */}
-      <AnimatedSection className="px-6 md:px-12 lg:px-20 pt-24 pb-16 md:pt-32 md:pb-20">
+      <AnimatedSection className="px-6 md:px-12 lg:px-20 pt-10 pb-8 md:pt-14 md:pb-10">
         <p className="text-sm tracking-widest uppercase text-foreground/50 mb-4">
           {PERSONAL_INFO.title}
         </p>
-        <h1 className="font-[family-name:var(--font-display)] text-7xl sm:text-8xl md:text-9xl lg:text-[10rem] leading-[0.9] tracking-tight">
+        <h1 className="font-[family-name:var(--font-display)] text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[0.95] tracking-tight">
           {PERSONAL_INFO.name}
         </h1>
       </AnimatedSection>
 
       {/* About */}
       <AnimatedSection
-        className="px-6 md:px-12 lg:px-20 py-16 md:py-24 border-t border-foreground/10"
+        className="px-6 md:px-12 lg:px-20 py-8 md:py-12 border-t border-foreground/10"
         delay={0.1}
       >
         <div className="max-w-3xl">
-          <h2 className="text-xs tracking-widest uppercase text-foreground/50 mb-8">
+          <h2 className="text-xs tracking-widest uppercase text-foreground/50 mb-4">
             {HOME_CONTENT.aboutMe.title}
           </h2>
-          <div className="space-y-6 text-lg leading-relaxed text-foreground/80">
+          <div className="space-y-4 text-base leading-relaxed text-foreground/80">
             <p>
               <span className="font-semibold text-foreground">
                 {HOME_CONTENT.aboutMe.professional.label}
@@ -61,7 +61,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="mt-10">
+          <div className="mt-6">
             <a
               href="/resume.pdf"
               download
@@ -76,10 +76,10 @@ export default function Home() {
 
       {/* Explore Grid */}
       <AnimatedSection
-        className="px-6 md:px-12 lg:px-20 py-16 md:py-24 border-t border-foreground/10"
+        className="px-6 md:px-12 lg:px-20 py-8 md:py-12 border-t border-foreground/10"
         delay={0.15}
       >
-        <h2 className="text-xs tracking-widest uppercase text-foreground/50 mb-10">
+        <h2 className="text-xs tracking-widest uppercase text-foreground/50 mb-6">
           {HOME_CONTENT.exploreMore.title}
         </h2>
         <div className="grid md:grid-cols-2 gap-6">
