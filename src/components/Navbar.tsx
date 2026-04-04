@@ -1,12 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { PERSONAL_INFO } from '@/constants/content';
 import { HOME_SHELL_CLASS } from '@/lib/styles';
-import { HOME_ENTRANCE } from '@/constants/motion';
+import { HOME_ENTRANCE, NAVBAR_SCROLL } from '@/constants/motion';
 import { motion, useAnimationControls, useReducedMotion } from 'motion/react';
 
 const navLinkClass =
@@ -17,13 +17,29 @@ export function Navbar() {
   const pathname = usePathname();
   const controls = useAnimationControls();
   const reduceMotion = useReducedMotion();
+  const headerRef = useRef<HTMLElement | null>(null);
+  const lastScrollYRef = useRef(0);
+  const isHiddenRef = useRef(false);
+  const isEnteringRef = useRef(false);
+  const frameRef = useRef<number | null>(null);
+  const entranceTimeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
+    if (entranceTimeoutRef.current !== null) {
+      window.clearTimeout(entranceTimeoutRef.current);
+      entranceTimeoutRef.current = null;
+    }
+
+    lastScrollYRef.current = window.scrollY;
+    isHiddenRef.current = false;
+
     if (reduceMotion) {
+      isEnteringRef.current = false;
       controls.set({ opacity: 1, y: 0 });
       return;
     }
 
+    isEnteringRef.current = true;
     controls.set({ opacity: 0, y: HOME_ENTRANCE.navbarOffset });
     void controls.start({
       opacity: 1,
@@ -34,10 +50,109 @@ export function Navbar() {
         ease: HOME_ENTRANCE.phaseTwoEase,
       },
     });
+
+    entranceTimeoutRef.current = window.setTimeout(() => {
+      isEnteringRef.current = false;
+      entranceTimeoutRef.current = null;
+    }, (HOME_ENTRANCE.phaseTwoDelay + HOME_ENTRANCE.phaseTwoDuration) * 1000);
+
+    return () => {
+      if (entranceTimeoutRef.current !== null) {
+        window.clearTimeout(entranceTimeoutRef.current);
+        entranceTimeoutRef.current = null;
+      }
+    };
   }, [controls, pathname, reduceMotion]);
+
+  useEffect(() => {
+    if (reduceMotion) {
+      return;
+    }
+
+    const animateVisible = () => {
+      if (!isHiddenRef.current) {
+        return;
+      }
+
+      isHiddenRef.current = false;
+      void controls.start({
+        opacity: 1,
+        y: 0,
+        transition: {
+          duration: NAVBAR_SCROLL.showDuration,
+          ease: NAVBAR_SCROLL.visibilityEase,
+        },
+      });
+    };
+
+    const animateHidden = () => {
+      if (isHiddenRef.current) {
+        return;
+      }
+
+      isHiddenRef.current = true;
+      void controls.start({
+        opacity: 0,
+        y: NAVBAR_SCROLL.hiddenOffset,
+        transition: {
+          duration: NAVBAR_SCROLL.hideDuration,
+          ease: NAVBAR_SCROLL.visibilityEase,
+        },
+      });
+    };
+
+    const updateVisibility = () => {
+      frameRef.current = null;
+
+      if (menuOpen || isEnteringRef.current) {
+        lastScrollYRef.current = window.scrollY;
+        return;
+      }
+
+      const currentScrollY = window.scrollY;
+      const threshold = Math.max(
+        headerRef.current?.offsetHeight ?? 0,
+        NAVBAR_SCROLL.scrollThreshold,
+      );
+      const delta = currentScrollY - lastScrollYRef.current;
+
+      if (currentScrollY <= threshold) {
+        animateVisible();
+        lastScrollYRef.current = currentScrollY;
+        return;
+      }
+
+      if (delta > NAVBAR_SCROLL.scrollDelta) {
+        animateHidden();
+      } else if (delta < -NAVBAR_SCROLL.scrollDelta) {
+        animateVisible();
+      }
+
+      lastScrollYRef.current = currentScrollY;
+    };
+
+    const handleScroll = () => {
+      if (frameRef.current !== null) {
+        return;
+      }
+
+      frameRef.current = window.requestAnimationFrame(updateVisibility);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (frameRef.current !== null) {
+        window.cancelAnimationFrame(frameRef.current);
+        frameRef.current = null;
+      }
+    };
+  }, [controls, menuOpen, reduceMotion]);
 
   return (
     <motion.header
+      ref={headerRef}
       initial={reduceMotion ? false : { opacity: 0, y: HOME_ENTRANCE.navbarOffset }}
       animate={controls}
       className="sticky top-0 z-50 border-b border-foreground/10 bg-background/95 backdrop-blur-sm"
