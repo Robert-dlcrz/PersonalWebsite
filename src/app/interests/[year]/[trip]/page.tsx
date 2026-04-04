@@ -1,8 +1,6 @@
-import Image from 'next/image';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowLeftIcon, MapPinIcon } from '@heroicons/react/24/outline';
-import { TripPhotoGallery } from '@/components/TripPhotoGallery';
+import { TripPage } from '@/components/trip-layouts/TripPage';
+import type { TripGalleryPhoto } from '@/components/trip-layouts/types';
 import { tripService } from '@/service/tripService';
 
 /**
@@ -43,11 +41,6 @@ type TripPageProps = {
   }>;
 };
 
-type GalleryPhoto = {
-  pathname: string;
-  url: string;
-};
-
 /**
  * Module-private helper: normalize `photosPath` so cover-photo matching is reliable
  * whether the path comes in with or without a trailing slash.
@@ -59,7 +52,7 @@ function buildCoverPathname(photosPath: string): string {
   return `${normalizedPhotosPath}/cover.jpg`;
 }
 
-function buildGalleryPhotos(photos: GalleryPhoto[], photosPath: string): GalleryPhoto[] {
+function buildGalleryPhotos(photos: TripGalleryPhoto[], photosPath: string): TripGalleryPhoto[] {
   const coverPathname = buildCoverPathname(photosPath);
 
   return photos.filter((photo) => photo.pathname !== coverPathname);
@@ -85,56 +78,8 @@ export default async function TripDetailPage({ params }: TripPageProps) {
   );
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
-      <div className="container mx-auto px-6 py-12 max-w-5xl">
-        <Link
-          href="/interests"
-          className="inline-flex items-center gap-2 text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors mb-8"
-        >
-          <ArrowLeftIcon className="h-5 w-5" />
-          Back to adventures
-        </Link>
-
-        <article className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-xl overflow-hidden">
-          <div className="relative aspect-[4/3] w-full bg-slate-200 dark:bg-slate-800">
-            <Image
-              src={tripDetail.coverPhotoUrl}
-              alt={tripDetail.title}
-              fill
-              priority
-              sizes="(min-width: 1024px) 900px, 100vw"
-              className="object-cover"
-            />
-          </div>
-          <div className="p-8 space-y-4">
-            <div className="flex flex-col gap-2">
-              <p className="text-sm font-semibold uppercase tracking-wide text-blue-600 dark:text-blue-400">
-                {tripDetail.month} {tripDetail.year}
-              </p>
-              <h1 className="text-4xl font-bold text-slate-900 dark:text-white">{tripDetail.title}</h1>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-6 text-slate-600 dark:text-slate-300">
-              <span className="inline-flex items-center gap-2 text-base">
-                <MapPinIcon className="h-5 w-5 text-blue-500" />
-                {tripDetail.location}
-              </span>
-              {tripDetail.dateRange && (
-                <span className="text-base">
-                  {tripDetail.dateRange.start} – {tripDetail.dateRange.end}
-                </span>
-              )}
-            </div>
-
-            <p className="text-lg text-slate-700 dark:text-slate-200 leading-relaxed">{tripDetail.description}</p>
-
-            {galleryPhotos.length > 0 && (
-              <TripPhotoGallery tripTitle={tripDetail.title} photos={galleryPhotos} />
-            )}
-          </div>
-        </article>
-      </div>
+    <main className="min-h-screen bg-background text-foreground">
+      <TripPage trip={tripDetail} galleryPhotos={galleryPhotos} />
     </main>
   );
 }
-

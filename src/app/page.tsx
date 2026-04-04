@@ -3,7 +3,6 @@
 import { motion, useReducedMotion } from 'motion/react';
 import { HomeHeroTitle } from '@/components/HomeHeroTitle';
 import { HomeNavigationGrid } from '@/components/HomeNavigationGrid';
-import { SiteFooter } from '@/components/SiteFooter';
 import { HOME_SHELL_CLASS } from '@/lib/styles';
 import { HOME_ENTRANCE } from '@/constants/motion';
 
@@ -37,8 +36,6 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
-
-      <SiteFooter />
     </main>
   );
 }
