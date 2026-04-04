@@ -17,12 +17,12 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-background text-foreground">
       <AnimatedSection className="pt-8 pb-6 md:pt-10 md:pb-8">
-        <div className="mx-auto w-full max-w-7xl px-6 md:px-10 lg:px-12">
+        <div className="mx-auto w-full max-w-[1800px] px-6 md:px-8 lg:px-10">
           <h1 className="font-[family-name:var(--font-display)] tracking-tight text-foreground">
-            <span className="block text-[clamp(4rem,14vw,11rem)] leading-[0.84]">
+            <span className="block text-[clamp(5rem,19vw,15rem)] leading-[0.82]">
               Robert
             </span>
-            <span className="block text-[clamp(2.5rem,9vw,7rem)] leading-[0.9]">
+            <span className="block text-[clamp(3.25rem,12vw,9.5rem)] leading-[0.88]">
               De La Cruz
             </span>
           </h1>
