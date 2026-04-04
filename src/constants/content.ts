@@ -16,6 +16,11 @@ import {
 export const PERSONAL_INFO = {
   name: 'Robert De La Cruz',
   title: 'Software Development Engineer',
+  navbarTitle: {
+    compact: 'Software Engineer | Traveler',
+    medium: 'Software Development Engineer | Traveler',
+    full: 'Software Development Engineer | Traveler | Adventurer',
+  },
   domain: 'robertdelacruz.com',
 } as const;
 
