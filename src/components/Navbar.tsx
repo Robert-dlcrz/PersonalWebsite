@@ -1,25 +1,56 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { PERSONAL_INFO } from '@/constants/content';
+import { HOME_SHELL_CLASS } from '@/lib/styles';
+import { HOME_ENTRANCE } from '@/constants/motion';
+import { motion, useAnimationControls, useReducedMotion } from 'motion/react';
 
 const navLinkClass =
   'text-xs font-medium uppercase tracking-widest text-foreground/70 hover:text-foreground transition-colors';
 
 export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const controls = useAnimationControls();
+  const reduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    if (reduceMotion) {
+      controls.set({ opacity: 1, y: 0 });
+      return;
+    }
+
+    controls.set({ opacity: 0, y: HOME_ENTRANCE.navbarOffset });
+    void controls.start({
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: HOME_ENTRANCE.phaseTwoDuration,
+        delay: HOME_ENTRANCE.phaseTwoDelay,
+        ease: HOME_ENTRANCE.phaseTwoEase,
+      },
+    });
+  }, [controls, pathname, reduceMotion]);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-foreground/10 bg-background/95 backdrop-blur-sm">
-      <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-6 py-4 md:px-10 lg:px-12">
+    <motion.header
+      initial={reduceMotion ? false : { opacity: 0, y: HOME_ENTRANCE.navbarOffset }}
+      animate={controls}
+      className="sticky top-0 z-50 border-b border-foreground/10 bg-background/95 backdrop-blur-sm"
+    >
+      <div className={`${HOME_SHELL_CLASS} flex items-center justify-between gap-4 py-4`}>
         <Link
           href="/"
           className="text-sm font-medium text-foreground hover:opacity-80 transition-opacity"
           onClick={() => setMenuOpen(false)}
         >
-          {PERSONAL_INFO.title}
+          <span className="inline md:hidden">{PERSONAL_INFO.navbarTitle.compact}</span>
+          <span className="hidden md:inline lg:hidden">{PERSONAL_INFO.navbarTitle.medium}</span>
+          <span className="hidden lg:inline">{PERSONAL_INFO.navbarTitle.full}</span>
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex" aria-label="Main">
@@ -53,7 +84,7 @@ export function Navbar() {
       {menuOpen ? (
         <nav
           id="mobile-nav"
-          className="mx-auto flex w-full max-w-7xl flex-col gap-4 border-t border-foreground/10 px-6 py-4 md:hidden md:px-10 lg:px-12"
+          className={`${HOME_SHELL_CLASS} flex flex-col gap-4 border-t border-foreground/10 py-4 md:hidden`}
           aria-label="Mobile main"
         >
           <Link
@@ -79,6 +110,6 @@ export function Navbar() {
           </Link>
         </nav>
       ) : null}
-    </header>
+    </motion.header>
   );
 }
