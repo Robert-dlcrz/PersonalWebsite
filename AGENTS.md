@@ -17,12 +17,12 @@ The `ROBDLC_PERSONAL_WEBSITE_READ_WRITE_TOKEN` env var is needed for listing tri
 ### Lint / Build / Test
 
 - **Lint:** `pnpm lint` — runs ESLint 9 with `eslint-config-next`.
-- **Build:** `BLOB_BASE_URL=https://avswwi5vtnxsddjy.public.blob.vercel-storage.com pnpm build` — `BLOB_BASE_URL` is required at build time because `generateStaticParams` fetches trip data.
-- **Test:** No test framework is installed (Jest is mentioned in project docs but not configured). No test files exist.
+- **Build:** `BLOB_BASE_URL=https://avswwi5vtnxsddjy.public.blob.vercel-storage.com pnpm build` — runs **`pnpm test`** (Vitest + coverage) first, then `next build`. `BLOB_BASE_URL` is required at build time because `generateStaticParams` fetches trip data. To compile only without tests: `pnpm build:next`.
+- **Test:** `pnpm test` — same suite the build runs first; Vitest with **coverage** (V8); open `coverage/index.html` for the HTML report. Coverage is collected for all app source under `src/` (`.ts` and `.tsx`); not every file is exercised by tests, so low or zero coverage in some areas is expected.
 
 ### Key scripts
 
-See `package.json` `scripts` section for `dev`, `build`, `start`, `lint`.
+See `package.json` `scripts` section for `dev`, `build`, `build:next`, `start`, `lint`, `test`.
 
 ### pnpm build scripts warning
 

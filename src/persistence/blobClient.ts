@@ -5,6 +5,17 @@ type GetOptions = {
   revalidateSeconds?: number;
 };
 
+export class BlobFetchError extends Error {
+  constructor(
+    public readonly pathname: string,
+    public readonly status: number,
+    public readonly statusText: string,
+  ) {
+    super(`BlobClient: failed to fetch ${pathname} (${status} ${statusText})`);
+    this.name = 'BlobFetchError';
+  }
+}
+
 export class BlobClient {
   constructor(private readonly defaultRevalidateSeconds = 60 * 10) {}
 
@@ -20,7 +31,7 @@ export class BlobClient {
     });
 
     if (!response.ok) {
-      throw new Error(`BlobClient: failed to fetch ${pathname}`);
+      throw new BlobFetchError(pathname, response.status, response.statusText);
     }
 
     return response;

@@ -4,9 +4,6 @@ function sanitizePathname(pathname: string) {
   return pathname.replace(/^\/+/, '');
 }
 
-/**
- * TODO: Add unit tests
- */
 export function resolveBlobUrl(pathname: string): string {
   if (ABSOLUTE_URL_REGEX.test(pathname)) {
     return pathname;

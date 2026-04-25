@@ -3,38 +3,21 @@ import matter from 'gray-matter';
 import { BlobClient } from '@/persistence/blobClient';
 import type { BlogPost } from '@/model/BlogPost';
 import type { BlogPostRecord } from '@/model/BlogPostRecord';
-import { extractSections } from '@/service/blogMarkdown/extractSections';
+import type { BlogPostSummary } from '@/model/BlogPostSummary';
+import { extractSections } from '@/utils/blogUtils';
+import { coerceDate } from '@/utils/dateUtils';
 
 const DEFAULT_REVALIDATE_SECONDS = 60 * 10; // 10 minutes
+const BLOG_INDEX_PATH = 'blog/blog_index.json';
 const BLOG_POST_PATH = (slug: string) => `blog/${slug}/post.md`;
-
-/**
- * gray-matter parses YAML dates into `Date` instances. We normalize to an
- * ISO-like string here so the downstream UI only needs to handle strings
- * and server-to-client serialization stays straightforward.
- */
-function coerceDate(value: unknown): string {
-  if (value instanceof Date) {
-    return value.toISOString().slice(0, 10);
-  }
-  if (typeof value === 'string') {
-    return value;
-  }
-  throw new Error('BlogService: frontmatter `date` must be a date or string');
-}
 
 function parseFrontmatter(source: string): { record: BlogPostRecord; body: string } {
   const { data, content } = matter(source);
 
-  if (typeof data.title !== 'string' || data.title.length === 0) {
-    throw new Error('BlogService: frontmatter is missing a `title`');
-  }
-
   const record: BlogPostRecord = {
-    title: data.title,
+    title: typeof data.title === 'string' ? data.title : '',
     date: coerceDate(data.date),
-    excerpt: typeof data.excerpt === 'string' ? data.excerpt : undefined,
-    tags: Array.isArray(data.tags) ? data.tags.filter((tag): tag is string => typeof tag === 'string') : undefined,
+    excerpt: typeof data.excerpt === 'string' ? data.excerpt : '',
   };
 
   return { record, body: content };
@@ -46,15 +29,25 @@ function parseFrontmatter(source: string): { record: BlogPostRecord; body: strin
  * singleton via `blogService`.
  */
 export class BlogService {
+  static readonly BLOG_INDEX_PATH = BLOG_INDEX_PATH;
+
   private readonly client: BlobClient;
 
   constructor(client = new BlobClient()) {
     this.client = client;
   }
 
+  async fetchPostSummaries(): Promise<BlogPostSummary[]> {
+    const posts = await this.client.getJson<BlogPostSummary[]>(BLOG_INDEX_PATH, {
+      revalidateSeconds: DEFAULT_REVALIDATE_SECONDS,
+    });
+
+    return posts;
+  }
+
   /**
    * Fetch a single post by slug. Parses the YAML frontmatter, extracts the
-   * h2 sections for the floating TOC, and returns both the raw markdown body
+   * h2 sections for the floating table of contents, and returns both the raw markdown body
    * (to be rendered server-side by `BlogMarkdown`) and the derived metadata.
    */
   async fetchPost(slug: string): Promise<BlogPost> {
@@ -89,7 +82,3 @@ const globalWithBlogService = globalThis as GlobalWithBlogService;
  */
 export const blogService =
   globalWithBlogService[BLOG_SERVICE_KEY] ?? (globalWithBlogService[BLOG_SERVICE_KEY] = new BlogService());
-
-declare global {
-  var __blogService: BlogService | undefined;
-}

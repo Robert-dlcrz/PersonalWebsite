@@ -6,7 +6,8 @@ import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import { unified } from 'unified';
 
-import { rewriteRelativeImages } from '@/service/blogMarkdown/rewriteRelativeImages';
+import { rewriteRelativeImages } from '@/utils/blogUtils';
+import styles from './BlogMarkdown.module.css';
 
 type BlogMarkdownProps = {
   markdown: string;
@@ -18,18 +19,8 @@ const PRETTY_CODE_OPTIONS = {
   keepBackground: true,
 } as const;
 
-/**
- * Server-rendered markdown surface for blog posts.
- *
- * We drive the pipeline with `unified` directly (rather than `react-markdown`)
- * because `rehype-pretty-code` is async and `react-markdown` only supports
- * synchronous plugins. Running server-side means shiki never ships to the
- * client bundle; the output is pure HTML that the client hydrates as-is.
- *
- * Element-level typography lives in [src/app/globals.css](src/app/globals.css)
- * under `.blog-markdown` selectors. That keeps the rendering path simple and
- * makes it trivial to evolve the styling without touching the pipeline.
- */
+// The unified pipeline stays server-side so Shiki and markdown parsing do not
+// ship to the browser.
 export async function BlogMarkdown({ markdown, slug }: BlogMarkdownProps) {
   const file = await unified()
     .use(remarkParse)
@@ -45,7 +36,7 @@ export async function BlogMarkdown({ markdown, slug }: BlogMarkdownProps) {
 
   return (
     <div
-      className="blog-markdown"
+      className={styles.markdown}
       dangerouslySetInnerHTML={{ __html: html }}
     />
   );
