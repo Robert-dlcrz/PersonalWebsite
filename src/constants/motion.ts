@@ -9,6 +9,12 @@ export const HOME_ENTRANCE = {
   phaseTwoEase: [0.16, 1, 0.3, 1],
 } as const;
 
+export const BLOG_ENTRANCE = {
+  heroDuration: 0.45,
+  contentDelay: 0.35,
+  contentDuration: 0.45,
+} as const;
+
 export const NAVBAR_SCROLL = {
   hiddenOffset: '-100%',
   hideDuration: 0.5,
