@@ -1,0 +1,19 @@
+{
+  "title": "Boston",
+  "slug": "boston",
+  "year": 2026,
+  "month": "April",
+  "location": "Boston, USA",
+  "description": "A week of work + a weekend in Boston",
+  "dateRange": {
+    "start": "2026-04-13",
+    "end": "2026-04-20"
+  },
+  "photosPath": "trips/2026/boston/photos",
+  "heroPhoto": "trips/2026/boston/photos/cover.jpg",
+  "tags": [
+    "city",
+    "travel",
+    "exploring"
+  ]
+}
