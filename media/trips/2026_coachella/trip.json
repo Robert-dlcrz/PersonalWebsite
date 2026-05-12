@@ -1,0 +1,19 @@
+{
+  "title": "Coachella",
+  "slug": "coachella",
+  "year": 2026,
+  "month": "April",
+  "location": "Indio, USA",
+  "description": "Year 2 at Coachella!",
+  "dateRange": {
+    "start": "2026-04-09",
+    "end": "2026-04-12"
+  },
+  "photosPath": "trips/2026/coachella/photos",
+  "heroPhoto": "trips/2026/coachella/photos/cover.jpg",
+  "tags": [
+    "music",
+    "concerts",
+    "festival"
+  ]
+}

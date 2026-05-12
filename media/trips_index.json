@@ -1,6 +1,24 @@
 [
   {
     "year": 2026,
+    "month": "April",
+    "slug": "boston",
+    "title": "Boston",
+    "location": "Boston, USA",
+    "description": "A week of work + a weekend in Boston",
+    "photosPath": "trips/2026/boston/photos"
+  },
+  {
+    "year": 2026,
+    "month": "April",
+    "slug": "coachella",
+    "title": "Coachella",
+    "location": "Indio, USA",
+    "description": "Year 2 at Coachella!",
+    "photosPath": "trips/2026/coachella/photos"
+  },
+  {
+    "year": 2026,
     "month": "February",
     "slug": "mexico_city",
     "title": "Mexico City",
