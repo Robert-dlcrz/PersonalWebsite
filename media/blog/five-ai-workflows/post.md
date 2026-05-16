@@ -16,7 +16,7 @@ Skills are brought into context dynamically when the agent decides they are rele
 
 An AI skill is simply a folder with a `SKILL.md` file, plus other related files. An example structure:
 
-```
+```text
 .cursor/skills/
 └── diagnose-order-issue/
     ├── SKILL.md
@@ -28,7 +28,7 @@ An AI skill is simply a folder with a `SKILL.md` file, plus other related files.
 
 Every skill is anchored by a `SKILL.md` with a `name` and `description` in the frontmatter, followed by the skill content. An example `SKILL.md`:
 
-```
+```markdown
 ---
 name: diagnose-order-issue
 description: >-
@@ -44,10 +44,10 @@ Run the script to pull the order, then analyze the response for the root cause.
 python scripts/fetch_order.py --order-id <ORDER_ID>
 
 2. Analyze the response for:
-   - `status` — flag anything not in `shipped` or `delivered`
-   - `items` — check for missing or partially fulfilled lines
-   - `fulfillment.delay_reason` — surface any carrier or warehouse notes
-   - `payment.status` — identify holds or failed charges
+   - `status`: flag anything not in `shipped` or `delivered`
+   - `items`: check for missing or partially fulfilled lines
+   - `fulfillment.delay_reason`: surface any carrier or warehouse notes
+   - `payment.status`: identify holds or failed charges
 
 3. Summarize the issue and suggest a resolution for the support team.
 
@@ -57,7 +57,7 @@ See `example_responses/order_success.json` and `order_delayed.json` for expected
 
 **Usage**: To use a skill, invoke it manually with `/skill-name`, or simply give a prompt related to the topic, and the AI agent should pick up the skill into context. Make sure your `description` field is specific enough to trigger automatically. If it loads inconsistently, tighten the description.
 
-```
+```text
 /diagnose-order-issue look into order abc-123 and provide some hypotheses on how the order is still "In Progress" after 10 days.
 ```
 
