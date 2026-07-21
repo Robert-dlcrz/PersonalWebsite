@@ -144,7 +144,7 @@ const nextConfig: NextConfig = {
   },
   async headers() {
     // Apply the same security header set to every route in the app so the
-    // policy is consistent across the homepage, music page, and trip routes.
+    // policy is consistent across the homepage, blog, and trip routes.
     return [
       {
         source: "/(.*)",

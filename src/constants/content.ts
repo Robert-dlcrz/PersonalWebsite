@@ -6,7 +6,7 @@
 
 import {
   GlobeAltIcon,
-  MusicalNoteIcon,
+  PencilSquareIcon,
   UserIcon,
 } from '@heroicons/react/24/outline';
 
@@ -77,14 +77,14 @@ export const NAVIGATION_CARDS = [
     accentColor: 'text-blue-600 dark:text-blue-400',
   },
   {
-    id: 'music',
-    href: '/music',
-    icon: MusicalNoteIcon,
-    gradientClasses: 'from-purple-400 to-pink-500',
-    title: 'Music',
-    description: 'Dive into my musical world. Check out my favorite tracks, playlists, and connect with me on SoundCloud to explore the sounds that inspire me.',
-    ctaText: 'Explore Music',
-    accentColor: 'text-purple-600 dark:text-purple-400',
+    id: 'blog',
+    href: '/blog',
+    icon: PencilSquareIcon,
+    gradientClasses: 'from-amber-500 to-orange-600',
+    title: 'Blog',
+    description: 'Notes on software engineering, AI workflows, and how I build.',
+    ctaText: 'Read Posts',
+    accentColor: 'text-amber-700 dark:text-amber-400',
   },
 ] as const;
 
@@ -101,93 +101,12 @@ export const INTERESTS_CONTENT = {
 } as const;
 
 // ============================================
-// MUSIC PAGE CONTENT
+// BLOG PAGE CONTENT
 // ============================================
-export const MUSIC_CONTENT = {
+export const BLOG_CONTENT = {
   hero: {
-    title: 'Music & Sounds',
-    subtitle: 'Music is the soundtrack to life. Explore my curated playlists and discover the sounds that inspire me daily.',
-    soundcloudButton: 'Follow on SoundCloud',
-    soundcloudUrl: 'https://soundcloud.com',
-  },
-  backToHome: 'Back to Home',
-  about: {
-    title: 'About My Music Taste',
-    paragraphs: [
-      'Music has always been a huge part of my life. From discovering new artists to creating the perfect playlist for every mood, I believe music has the power to transform any moment.',
-      "My taste is eclectic – I appreciate everything from electronic and indie to jazz and hip-hop. What matters most is the vibe, the emotion, and how a track makes you feel. Whether I'm coding, traveling, or just relaxing, there's always a perfect soundtrack.",
-      "Check out my SoundCloud to dive deeper into my musical journey, discover my latest finds, and see what's currently on repeat!",
-    ],
-  },
-  cta: {
-    soundcloud: {
-      title: 'Visit My SoundCloud',
-      description: 'Follow me on SoundCloud to stay updated with my latest tracks, favorites, and playlists.',
-      buttonText: 'Open SoundCloud',
-    },
-    home: {
-      title: 'Back to Home',
-      description: 'Return to the homepage to explore more about me and my other interests.',
-      buttonText: 'Go Home',
-    },
+    title: 'Blog',
+    compactTitle: 'Blog',
   },
 } as const;
-
-// Sample playlist data - replace with real data later
-export const PLAYLISTS = [
-  {
-    id: 1,
-    title: 'Coding Sessions',
-    genre: 'Electronic / Chill',
-    trackCount: 42,
-    description: 'The perfect soundtrack for deep focus coding sessions. Electronic beats and ambient sounds to keep you in the zone.',
-    color: 'from-purple-400 to-pink-500',
-    emoji: '💻',
-  },
-  {
-    id: 2,
-    title: 'Road Trip Vibes',
-    genre: 'Indie / Alternative',
-    trackCount: 38,
-    description: 'Windows down, volume up. The ultimate collection of indie and alternative tracks for the open road.',
-    color: 'from-orange-400 to-red-500',
-    emoji: '🚗',
-  },
-  {
-    id: 3,
-    title: 'Sunset Sessions',
-    genre: 'Lofi / Jazz',
-    trackCount: 28,
-    description: 'Smooth jazz and lofi beats perfect for unwinding as the day winds down. Your evening relaxation companion.',
-    color: 'from-yellow-400 to-orange-500',
-    emoji: '🌅',
-  },
-  {
-    id: 4,
-    title: 'Workout Energy',
-    genre: 'Hip Hop / EDM',
-    trackCount: 35,
-    description: 'High-energy tracks to power through your workout. Bass-heavy beats that keep you moving and motivated.',
-    color: 'from-green-400 to-teal-500',
-    emoji: '💪',
-  },
-  {
-    id: 5,
-    title: 'Late Night Thoughts',
-    genre: 'R&B / Soul',
-    trackCount: 31,
-    description: 'Smooth R&B and soulful melodies for those introspective late-night moments. Pure vibes only.',
-    color: 'from-blue-400 to-indigo-500',
-    emoji: '🌙',
-  },
-  {
-    id: 6,
-    title: 'Morning Coffee',
-    genre: 'Acoustic / Folk',
-    trackCount: 25,
-    description: 'Start your day right with mellow acoustic tunes and folk melodies that pair perfectly with your morning brew.',
-    color: 'from-amber-400 to-yellow-500',
-    emoji: '☕',
-  },
-] as const;
 

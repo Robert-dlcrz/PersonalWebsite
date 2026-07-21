@@ -1,6 +1,6 @@
 import matter from 'gray-matter';
 
-import { BlobClient } from '@/persistence/blobClient';
+import { BlobClient, BlobFetchError } from '@/persistence/blobClient';
 import type { BlogPost } from '@/model/BlogPost';
 import type { BlogPostRecord } from '@/model/BlogPostRecord';
 import type { BlogPostSummary } from '@/model/BlogPostSummary';
@@ -42,7 +42,7 @@ export class BlogService {
       revalidateSeconds: DEFAULT_REVALIDATE_SECONDS,
     });
 
-    return posts;
+    return posts.toSorted((a, b) => b.date.localeCompare(a.date));
   }
 
   /**
@@ -82,3 +82,31 @@ const globalWithBlogService = globalThis as GlobalWithBlogService;
  */
 export const blogService =
   globalWithBlogService[BLOG_SERVICE_KEY] ?? (globalWithBlogService[BLOG_SERVICE_KEY] = new BlogService());
+
+export function isMissingBlogIndexError(error: unknown): boolean {
+  return (
+    error instanceof BlobFetchError &&
+    error.pathname === BlogService.BLOG_INDEX_PATH &&
+    error.status === 404
+  );
+}
+
+/** Used by /blog list page (and optionally generateStaticParams). */
+export async function fetchPostSummariesOrEmpty(
+  service: BlogService = blogService,
+): Promise<BlogPostSummary[]> {
+  try {
+    return await service.fetchPostSummaries();
+  } catch (error) {
+    // TODO(remove-missing-index-fallback): delete this branch once
+    // blog/blog_index.json is reliably uploaded to Blob. Missing index
+    // should fail hard after rollout, not silently return [].
+    if (isMissingBlogIndexError(error)) {
+      console.warn(
+        'Blog index: blog/blog_index.json missing; returning empty list until index exists',
+      );
+      return [];
+    }
+    throw error;
+  }
+}

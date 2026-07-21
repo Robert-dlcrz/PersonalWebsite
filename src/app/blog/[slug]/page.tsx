@@ -4,8 +4,7 @@ import { cache } from 'react';
 
 import { BlogMarkdown } from '@/components/blog-layouts/BlogMarkdown';
 import { BlogPage } from '@/components/blog-layouts/BlogPage';
-import { BlobFetchError } from '@/persistence/blobClient';
-import { BlogService, blogService } from '@/service/blogService';
+import { blogService, isMissingBlogIndexError } from '@/service/blogService';
 
 // Blog posts live in Vercel Blob, so new slugs should work without redeploying
 // or being listed in generateStaticParams at build time.
@@ -25,11 +24,7 @@ export async function generateStaticParams() {
     const posts = await blogService.fetchPostSummaries();
     return posts.map((post) => ({ slug: post.slug }));
   } catch (error) {
-    if (
-      error instanceof BlobFetchError &&
-      error.pathname === BlogService.BLOG_INDEX_PATH &&
-      error.status === 404
-    ) {
+    if (isMissingBlogIndexError(error)) {
       console.warn('Blog route: blog index missing; static params disabled until blog/blog_index.json exists');
       return [];
     }
