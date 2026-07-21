@@ -10,7 +10,7 @@ This is a Next.js 16 personal portfolio site using pnpm (enforced via `.npmrc` +
 BLOB_BASE_URL=https://avswwi5vtnxsddjy.public.blob.vercel-storage.com pnpm dev
 ```
 
-The `BLOB_BASE_URL` env var is required for the `/interests` pages (trip data fetched from Vercel Blob). The public blob hostname is already hardcoded in `next.config.ts` for image optimization, so reuse it. Without it, the homepage and `/music` still work but `/interests` will error.
+The `BLOB_BASE_URL` env var is required for the `/interests` and `/blog` pages (trip and blog data fetched from Vercel Blob). The public blob hostname is already hardcoded in `next.config.ts` for image optimization, so reuse it. Without it, the homepage still works but `/interests` and `/blog` will error. The blog list also needs Blob `blog/blog_index.json`; individual posts need `blog/<slug>/post.md`.
 
 The `ROBDLC_PERSONAL_WEBSITE_READ_WRITE_TOKEN` env var is needed for listing trip photos via `@vercel/blob` `list()`. Without it, trip detail pages render but show no photo gallery. The code handles this gracefully (try/catch returns empty array).
 

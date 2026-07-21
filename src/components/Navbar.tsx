@@ -175,8 +175,8 @@ export function Navbar() {
           <Link href="/interests" className={navLinkClass}>
             Travel
           </Link>
-          <Link href="/music" className={navLinkClass}>
-            Music
+          <Link href="/blog" className={navLinkClass}>
+            Blog
           </Link>
         </nav>
 
@@ -217,11 +217,11 @@ export function Navbar() {
             Travel
           </Link>
           <Link
-            href="/music"
+            href="/blog"
             className={navLinkClass}
             onClick={() => setMenuOpen(false)}
           >
-            Music
+            Blog
           </Link>
         </nav>
       ) : null}
