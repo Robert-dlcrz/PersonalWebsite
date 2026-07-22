@@ -30,18 +30,10 @@ export const PERSONAL_INFO = {
 export const HOME_CONTENT = {
   aboutMe: {
     title: 'About Me',
-    professional: {
-      label: 'Professional:',
-      text: "I'm a passionate software engineer specializing in building scalable, high-performance applications. With expertise in cloud architecture, full-stack development, and modern web technologies, I love solving complex problems and creating elegant solutions.",
-    },
-    personal: {
-      label: 'Personal:',
-      text: "Outside of coding, I'm driven by curiosity and a love for learning. I enjoy exploring new technologies, contributing to open-source projects, and sharing knowledge with the developer community.",
-    },
-    hobbies: {
-      label: 'Hobbies:',
-      text: "When I'm not at my desk, you'll find me traveling to new destinations, discovering incredible music, and seeking out adventures that push me outside my comfort zone. Life's too short not to explore!",
-    },
+    paragraphs: [
+      "I'm Robert De La Cruz, a Software Development Engineer at Amazon, where I'm part of the Ring organization. I build backend services and APIs that power customer-facing experiences, working on everything from critical infrastructure improvements and service modernizations to launching new product capabilities. I enjoy solving challenging engineering problems, driving projects from design to production, and exploring how AI can make software development more effective.",
+      'Outside of work, I enjoy traveling, staying active, learning about personal finance, and spending weekends watching the Rams, Clippers, and Dodgers. This website is where I share my projects, experiences, and interests as I continue growing as a person and engineer.',
+    ],
   },
   resumeButton: 'Download Resume',
   exploreMore: {
@@ -58,7 +50,7 @@ export const HOME_CONTENT = {
 export const NAVIGATION_CARDS = [
   {
     id: 'about',
-    href: '/interests',
+    href: '/about-me',
     icon: UserIcon,
     gradientClasses: 'from-gray-900 to-black',
     title: 'About Me',
