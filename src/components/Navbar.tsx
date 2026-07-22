@@ -169,7 +169,7 @@ export function Navbar() {
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex" aria-label="Main">
-          <Link href="/interests" className={navLinkClass}>
+          <Link href="/about-me" className={navLinkClass}>
             About
           </Link>
           <Link href="/interests" className={navLinkClass}>
@@ -203,7 +203,7 @@ export function Navbar() {
           aria-label="Mobile main"
         >
           <Link
-            href="/interests"
+            href="/about-me"
             className={navLinkClass}
             onClick={() => setMenuOpen(false)}
           >

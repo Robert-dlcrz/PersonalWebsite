@@ -10,7 +10,8 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run --coverage && node scripts/print-coverage-report.mjs",
-    "trip:onboard": "node scripts/onboard-trip.mjs"
+    "trip:onboard": "node scripts/onboard-trip.mjs",
+    "heic:convert": "node scripts/convert-heic.mjs"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
