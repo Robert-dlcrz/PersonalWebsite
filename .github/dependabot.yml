@@ -4,12 +4,31 @@ updates:
     directory: "/"
     schedule:
       interval: weekly
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 10
     groups:
-      all-dependencies:
+      # Batch only low-risk minor/patch bumps into a single weekly PR. Major
+      # bumps are intentionally excluded here so each one arrives as its own
+      # PR we can review and test against the preview deploy individually,
+      # instead of one bad major blocking a batch of safe updates.
+      minor-and-patch:
         patterns: ["*"]
+        update-types:
+          - "minor"
+          - "patch"
+    ignore:
+      # Held back until the lint toolchain catches up: typescript-eslint has no
+      # TypeScript 7 support, and eslint-plugin-react (pulled in via
+      # eslint-config-next) breaks on ESLint 10. Remove an entry to let that
+      # major's PR appear again once upstream support lands.
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "eslint"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
       interval: weekly
+    groups:
+      github-actions:
+        patterns: ["*"]
