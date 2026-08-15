@@ -94,7 +94,10 @@ describe('rewriteRelativeImages', () => {
     // given
     const tree: Root = {
       type: 'root',
-      children: [element('img', { src: true })],
+      // src is intentionally a non-string to exercise the runtime guard for
+      // untrusted HAST. @types/hast now types src as string, so cast to keep
+      // testing the boolean case.
+      children: [element('img', { src: true as unknown as string })],
     };
 
     // when
