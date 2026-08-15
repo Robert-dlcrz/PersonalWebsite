@@ -35,7 +35,6 @@ export const HOME_CONTENT = {
       'Outside of work, I enjoy traveling, staying active, learning about personal finance, and spending weekends watching the Rams, Clippers, and Dodgers. This website is where I share my projects, experiences, and interests as I continue growing as a person and engineer.',
     ],
   },
-  resumeButton: 'Download Resume',
   exploreMore: {
     title: 'Explore More',
   },
