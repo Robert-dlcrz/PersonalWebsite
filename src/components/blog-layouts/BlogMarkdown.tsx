@@ -1,4 +1,5 @@
 import rehypePrettyCode from 'rehype-pretty-code';
+import rehypeSanitize from 'rehype-sanitize';
 import rehypeSlug from 'rehype-slug';
 import rehypeStringify from 'rehype-stringify';
 import remarkGfm from 'remark-gfm';
@@ -26,6 +27,10 @@ export async function BlogMarkdown({ markdown, slug }: BlogMarkdownProps) {
     .use(remarkParse)
     .use(remarkGfm)
     .use(remarkRehype)
+    // Sanitize untrusted author HTML before our own trusted transforms run, so
+    // dangerous URLs (javascript:/data:) and attributes are stripped while the
+    // ids from rehypeSlug and inline styles from rehypePrettyCode survive.
+    .use(rehypeSanitize)
     .use(rehypeSlug)
     .use(rewriteRelativeImages(slug))
     .use(rehypePrettyCode, PRETTY_CODE_OPTIONS)
