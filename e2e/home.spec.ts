@@ -36,11 +36,9 @@ test('homepage renders the hero heading and the About Me, Travel, and Blog entry
   await expect(heading).toBeVisible();
   await expect(heading).toContainText('Robert De La Cruz');
 
-  const nav = page.getByRole('navigation', { name: 'Main' });
-  for (const label of ['About', 'Travel', 'Blog']) {
-    await expect(nav.getByRole('link', { name: label, exact: true })).toBeVisible();
-  }
-
+  // The home cards are asserted rather than the navbar: under
+  // prefers-reduced-motion the navbar settles at opacity 0, which toBeVisible()
+  // does not catch, so a navbar assertion would pass without proving anything.
   for (const title of ['About Me', 'Travel', 'Blog']) {
     await expect(page.getByRole('heading', { level: 3, name: title, exact: true })).toBeVisible();
   }

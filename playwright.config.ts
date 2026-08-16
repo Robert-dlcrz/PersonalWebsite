@@ -15,8 +15,9 @@ const localBaseURL = `http://127.0.0.1:${port}`;
 const blobBaseURL = process.env.BLOB_BASE_URL ?? `https://${blobHostname}`;
 
 // The homepage hides the single-line hero heading below 1180px, so every project
-// runs wide enough to exercise the desktop layout.
-const viewport = { width: 1280, height: 900 };
+// runs wide enough to exercise the desktop layout. The height fits all three
+// home cards so the asserted content is on screen rather than below the fold.
+const viewport = { width: 1280, height: 1000 };
 
 export default defineConfig({
   testDir: './e2e',
