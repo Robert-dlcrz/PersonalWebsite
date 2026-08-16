@@ -122,6 +122,8 @@ jobs:
               ;;
           esac
 
+          echo "Resolved preview $base_url at commit $sha (via $EVENT_NAME)"
+
           echo "should_run=true" >>"$GITHUB_OUTPUT"
           echo "base_url=$base_url" >>"$GITHUB_OUTPUT"
           echo "sha=$sha" >>"$GITHUB_OUTPUT"
