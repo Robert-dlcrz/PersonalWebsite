@@ -11,6 +11,7 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run --coverage && node scripts/print-coverage-report.mjs",
+    "test:e2e": "playwright test",
     "trip:onboard": "node scripts/onboard-trip.mjs",
     "heic:convert": "node scripts/convert-heic.mjs"
   },
@@ -40,6 +41,7 @@
     "pnpm": ">=8.0.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.62.1",
     "@tailwindcss/postcss": "^4",
     "@types/hast": "^3.0.5",
     "@types/mdast": "^4.0.4",

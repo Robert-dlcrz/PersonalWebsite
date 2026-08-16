@@ -5,8 +5,9 @@ import type { NextConfig } from "next";
 const isProduction = process.env.NODE_ENV === "production";
 
 // This is the single remote origin currently used by the site for trip photos
-// and JSON content served from Vercel Blob.
-const blobHostname = "avswwi5vtnxsddjy.public.blob.vercel-storage.com";
+// and JSON content served from Vercel Blob. Exported so test harnesses can
+// default BLOB_BASE_URL to the same origin instead of repeating it.
+export const blobHostname = "avswwi5vtnxsddjy.public.blob.vercel-storage.com";
 
 // Static CSP in next.config.ts cannot use per-request nonces, so we allow the
 // minimum inline behavior needed for the Next.js runtime and document the trade-off.

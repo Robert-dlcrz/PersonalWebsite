@@ -1,10 +1,12 @@
 import path from 'node:path';
 
-import { defineConfig } from 'vitest/config';
+import { configDefaults, defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
     environment: 'node',
+    // e2e/ holds Playwright specs, which cannot run under Vitest.
+    exclude: [...configDefaults.exclude, 'e2e/**'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html'],
@@ -15,6 +17,7 @@ export default defineConfig({
         '**/node_modules/**',
         '**/test/**',
         '**/tests/**',
+        'e2e/**',
       ],
     },
   },

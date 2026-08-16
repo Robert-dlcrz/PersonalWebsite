@@ -12,6 +12,12 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Generated test output, which is otherwise linted whenever it happens to
+    // exist (e.g. running `pnpm lint` after `pnpm test`).
+    "coverage/**",
+    "test-results/**",
+    "playwright-report/**",
+    "blob-report/**",
   ]),
 ]);
 
