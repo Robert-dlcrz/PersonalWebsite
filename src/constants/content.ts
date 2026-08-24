@@ -89,6 +89,11 @@ export const INTERESTS_CONTENT = {
     mediumLineOne: 'Travel &',
     mediumLineTwo: 'Adventures',
   },
+  coverNote: {
+    text: 'Curious how the covers were generated?',
+    linkLabel: 'I wrote it up.',
+    href: '/blog/using-lumas-api-to-generate-trip-covers',
+  },
 } as const;
 
 // ============================================

@@ -64,6 +64,18 @@ export function InterestsPageContent({ trips }: InterestsPageContentProps) {
           </span>
         </motion.h1>
 
+        <motion.p
+          initial={cardsInitial}
+          animate={{ opacity: 1, y: 0 }}
+          transition={cardsTransition}
+          className="mt-3 text-[0.7rem] tracking-[0.22em] text-foreground/55 md:text-xs"
+        >
+          {INTERESTS_CONTENT.coverNote.text}{' '}
+          <Link href={INTERESTS_CONTENT.coverNote.href} className="underline hover:text-foreground/80">
+            {INTERESTS_CONTENT.coverNote.linkLabel}
+          </Link>
+        </motion.p>
+
         <motion.div
           initial={cardsInitial}
           animate={{ opacity: 1, y: 0 }}
