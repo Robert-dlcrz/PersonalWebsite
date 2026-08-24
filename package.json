@@ -13,6 +13,7 @@
     "test": "vitest run --coverage && node scripts/print-coverage-report.mjs",
     "test:e2e": "playwright test",
     "trip:onboard": "node scripts/onboard-trip.mjs",
+    "trip:cover": "node scripts/set-trip-cover.mjs",
     "heic:convert": "node scripts/convert-heic.mjs"
   },
   "dependencies": {

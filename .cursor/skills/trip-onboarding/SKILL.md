@@ -1,6 +1,7 @@
 ---
 name: trip-onboarding
 description: Guide for adding new trips to the personal website. Use when onboarding a trip, uploading travel photos, adding to Vercel Blob, or troubleshooting why new trip content isn't appearing.
+disable-model-invocation: true
 ---
 
 # Trip Onboarding
@@ -8,6 +9,8 @@ description: Guide for adding new trips to the personal website. Use when onboar
 Complete guide for adding new trips to robertdelacruz.com.
 
 Use `pnpm trip:onboard` for the actual new-trip workflow. Keep this skill as the quick reference for what the script is doing behind the scenes and for troubleshooting if something does not appear correctly.
+
+To swap an existing trip's cover with an image already in Blob (e.g. a generated composite), use `pnpm trip:cover -- --image <blob-url-or-pathname> --trip <year>/<slug>` — it verifies the trip path, converts PNG to JPEG if needed, and overwrites `cover.jpg`; no manual sips or Dashboard upload required.
 
 ## Prerequisites
 

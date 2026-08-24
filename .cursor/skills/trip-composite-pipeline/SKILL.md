@@ -1,6 +1,7 @@
 ---
 name: trip-composite-pipeline
 description: Invoke the secret-gated Luma composite endpoint for trip photos. Use when generating a trip composite image, setting up LUMA_AGENTS_API_KEY or PIPELINE_SECRET, or troubleshooting a failed /api/trips/composite call.
+disable-model-invocation: true
 ---
 
 # Trip Composite Pipeline
@@ -46,6 +47,10 @@ curl -X POST "$BASE_URL/api/trips/composite" \
 Open the returned Blob URL. Output lands at `trips/composites/{lumaId}.{ext}` in the store.
 
 **Done when:** the composite renders in the browser.
+
+### Step 4 (optional): Install as a trip cover
+
+To make the composite a trip's cover photo, run `pnpm trip:cover -- --image <returned url> --trip <year>/<slug>`. It verifies the trip's photos path, converts PNG output to JPEG, and overwrites `trips/{year}/{slug}/photos/cover.jpg`.
 
 ## Environment
 
