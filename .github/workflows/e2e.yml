@@ -4,10 +4,10 @@ name: E2E
 # has to start after Vercel finishes deploying rather than on `pull_request`.
 # This is deliberately separate from verify.yml, which lints, unit tests, and builds.
 on:
-  # Primary: Vercel's "Deployment Success" GitHub integration webhook.
-  repository_dispatch:
-    types: [vercel.deployment.success]
-  # Fallback: the deployment statuses the Vercel GitHub app already publishes.
+  # The deployment statuses the Vercel GitHub app publishes. (Vercel's
+  # repository_dispatch events are not used: `vercel.deployment.success` only
+  # fires for production promotions, and `vercel.deployment.ready` would
+  # duplicate the deployment_status runs.)
   deployment_status:
   workflow_dispatch:
     inputs:
@@ -25,8 +25,7 @@ permissions:
 
 concurrency:
   group: >-
-    e2e-${{ github.event.client_payload.git.sha
-    || github.event.deployment_status.environment_url
+    e2e-${{ github.event.deployment_status.environment_url
     || inputs.base_url
     || github.ref }}
   cancel-in-progress: true
@@ -45,9 +44,6 @@ jobs:
         id: target
         env:
           EVENT_NAME: ${{ github.event_name }}
-          DISPATCH_URL: ${{ github.event.client_payload.url }}
-          DISPATCH_ENVIRONMENT: ${{ github.event.client_payload.environment }}
-          DISPATCH_SHA: ${{ github.event.client_payload.git.sha }}
           STATUS_STATE: ${{ github.event.deployment_status.state }}
           STATUS_ENVIRONMENT: ${{ github.event.deployment_status.environment }}
           STATUS_URL: ${{ github.event.deployment_status.environment_url }}
@@ -64,15 +60,6 @@ jobs:
           skip_reason=""
 
           case "$EVENT_NAME" in
-            repository_dispatch)
-              if [ "${DISPATCH_ENVIRONMENT,,}" = "preview" ]; then
-                base_url="$DISPATCH_URL"
-                sha="${DISPATCH_SHA:-$FALLBACK_SHA}"
-                should_run=true
-              else
-                skip_reason="client_payload.environment is '$DISPATCH_ENVIRONMENT', not 'preview'"
-              fi
-              ;;
             deployment_status)
               status_environment_lower="${STATUS_ENVIRONMENT,,}"
               if [ "$STATUS_STATE" != "success" ]; then
@@ -129,11 +116,14 @@ jobs:
               ;;
           esac
 
-          # The sha is handed to actions/checkout; anything but a full commit
-          # hash means the payload was malformed.
-          if ! printf '%s' "$sha" | grep -Eq '^[0-9a-f]{40}$'; then
-            echo "::error::Resolved commit '$sha' is not a 40-char hex sha."
-            exit 1
+          # A payload-derived sha is handed to actions/checkout; anything but a
+          # full commit hash means the payload was malformed. Manual runs are
+          # exempt: their ref input legitimately accepts branch names and tags.
+          if [ "$EVENT_NAME" != "workflow_dispatch" ]; then
+            if ! printf '%s' "$sha" | grep -Eq '^[0-9a-f]{40}$'; then
+              echo "::error::Resolved commit '$sha' is not a 40-char hex sha."
+              exit 1
+            fi
           fi
 
           echo "Resolved preview $base_url at commit $sha (via $EVENT_NAME)"
