@@ -20,6 +20,9 @@ importers:
       gray-matter:
         specifier: ^4.0.3
         version: 4.0.3
+      luma-agents:
+        specifier: ^0.1.2
+        version: 0.1.2
       mdast-util-to-string:
         specifier: ^4.0.0
         version: 4.0.0
@@ -68,6 +71,9 @@ importers:
       yet-another-react-lightbox:
         specifier: ^3.32.2
         version: 3.32.2(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
     devDependencies:
       '@playwright/test':
         specifier: ^1.62.1
@@ -2065,6 +2071,9 @@ packages:
 
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
+
+  luma-agents@0.1.2:
+    resolution: {integrity: sha512-xCBtRWK9Zs/8+x8ri+iKZF+O+6aWbJFbHjIcMCWlamzBHSJI63hK/+bmUwGEA+2az8Rus2LPd87bZzdUG8sUtQ==}
 
   magic-string@0.30.21:
     resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
@@ -5031,6 +5040,8 @@ snapshots:
   lru-cache@5.1.1:
     dependencies:
       yallist: 3.1.1
+
+  luma-agents@0.1.2: {}
 
   magic-string@0.30.21:
     dependencies:

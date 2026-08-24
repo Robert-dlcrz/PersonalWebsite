@@ -1,8 +1,12 @@
-import { list, type ListBlobResult } from '@vercel/blob';
+import { list, put, type ListBlobResult, type PutBlobResult } from '@vercel/blob';
 import { resolveBlobUrl } from '@/utils/blob';
 
 type GetOptions = {
   revalidateSeconds?: number;
+};
+
+type PutOptions = {
+  contentType?: string;
 };
 
 export class BlobFetchError extends Error {
@@ -16,6 +20,11 @@ export class BlobFetchError extends Error {
   }
 }
 
+/**
+ * TODO: split this into a persistence client (raw SDK wrap that logs and
+ * rethrows) and a BlobService (path conventions, typed errors). It currently
+ * does both.
+ */
 export class BlobClient {
   constructor(private readonly defaultRevalidateSeconds = 60 * 10) {}
 
@@ -52,5 +61,27 @@ export class BlobClient {
       prefix,
       token: process.env.ROBDLC_PERSONAL_WEBSITE_READ_WRITE_TOKEN,
     });
+  }
+
+  /**
+   * Raw write to the Blob store, mirroring the onboarding script's settings
+   * (public access, stable pathname). Logs the pathname and rethrows failures;
+   * callers own any domain-level wrapping of the error.
+   */
+  async putBlob(pathname: string, body: Buffer, options?: PutOptions): Promise<PutBlobResult> {
+    try {
+      const result = await put(pathname, body, {
+        access: 'public',
+        addRandomSuffix: false,
+        allowOverwrite: true,
+        contentType: options?.contentType,
+        token: process.env.ROBDLC_PERSONAL_WEBSITE_READ_WRITE_TOKEN,
+      });
+      console.log(`BlobClient: put ok pathname=${pathname} bytes=${body.byteLength}`);
+      return result;
+    } catch (error) {
+      console.error(`BlobClient: put failed pathname=${pathname}`, error);
+      throw error;
+    }
   }
 }
