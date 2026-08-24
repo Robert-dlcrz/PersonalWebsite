@@ -1,11 +1,17 @@
-import { expect, test, type Page, type Response } from '@playwright/test';
+import type { Page, Response } from '@playwright/test';
+
+import { expect, test } from './fixtures';
 
 const VERCEL_AUTH_TITLE = /log ?in|sign ?in|authentication required/i;
 
+// Missing configuration is already rejected at config load (playwright.config.ts),
+// so reaching this page means the secret itself was not accepted at runtime.
 const PROTECTION_HINT = [
-  'The target served a Vercel authentication page instead of the site.',
-  'Preview deployments must be publicly reachable for this suite to run:',
-  'Vercel → Project → Settings → Deployment Protection → set Vercel Authentication to Disabled.',
+  'The target served a Vercel authentication page instead of the site, so the Deployment',
+  'Protection bypass secret was not accepted. If the secret was rotated or regenerated in',
+  'Vercel (Project → Settings → Deployment Protection → Protection Bypass for Automation),',
+  'update the VERCEL_AUTOMATION_BYPASS_SECRET GitHub Actions secret to match and redeploy',
+  'the preview so it picks up the new value.',
 ].join(' ');
 
 /**

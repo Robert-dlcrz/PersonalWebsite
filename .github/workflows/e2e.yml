@@ -112,7 +112,9 @@ jobs:
               ;;
           esac
 
-          # Guard against ever pointing the suite at the live site.
+          # Guard against ever pointing the suite at the live site, and only
+          # accept *.vercel.app hosts so a bad payload cannot aim the browser
+          # (and the bypass secret) at an arbitrary target.
           host="${base_url#https://}"
           host="${host%%/*}"
           case "$host" in
@@ -120,7 +122,19 @@ jobs:
               echo "::error::Refusing to run e2e against production ($host)."
               exit 1
               ;;
+            *.vercel.app) ;;
+            *)
+              echo "::error::Refusing to run e2e against non-vercel.app host '$host'."
+              exit 1
+              ;;
           esac
+
+          # The sha is handed to actions/checkout; anything but a full commit
+          # hash means the payload was malformed.
+          if ! printf '%s' "$sha" | grep -Eq '^[0-9a-f]{40}$'; then
+            echo "::error::Resolved commit '$sha' is not a 40-char hex sha."
+            exit 1
+          fi
 
           echo "Resolved preview $base_url at commit $sha (via $EVENT_NAME)"
 
@@ -142,6 +156,18 @@ jobs:
     if: needs.resolve.outputs.should_run == 'true'
     runs-on: ubuntu-latest
     steps:
+      # Fail in seconds if the repo secret is missing, instead of after
+      # checkout, pnpm install, and a Chromium download. Secrets cannot be read
+      # in `if:` expressions, so check through env indirection.
+      - name: Require bypass secret
+        env:
+          SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+        run: |
+          if [ -z "$SECRET" ]; then
+            echo "::error::The VERCEL_AUTOMATION_BYPASS_SECRET repo secret is not set. Generate it in Vercel (Project → Settings → Deployment Protection → Protection Bypass for Automation) and add it under GitHub → Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+
       - name: Checkout
         uses: actions/checkout@v7
         with:
@@ -165,7 +191,11 @@ jobs:
       - name: Run Playwright
         run: pnpm test:e2e
         env:
-          BASE_URL: ${{ needs.resolve.outputs.base_url }}
+          E2E_BASE_URL: ${{ needs.resolve.outputs.base_url }}
+          # Lets the suite through Vercel Deployment Protection without turning
+          # protection off for human visitors. Generated in Vercel → Project →
+          # Settings → Deployment Protection → Protection Bypass for Automation.
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
 
       - name: Upload Playwright report
         uses: actions/upload-artifact@v7
