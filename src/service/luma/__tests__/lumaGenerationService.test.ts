@@ -95,7 +95,7 @@ describe('LumaGenerationService.generateComposite', () => {
       aspect_ratio: '16:9',
     });
     expect(fake.getGeneration).toHaveBeenCalledTimes(2);
-    expect(fake.getGeneration).toHaveBeenCalledWith(LUMA_ID);
+    expect(fake.getGeneration).toHaveBeenCalledWith(LUMA_ID, expect.any(AbortSignal));
   });
 
   it('omits aspect_ratio when the request does not set one', async () => {
@@ -159,6 +159,22 @@ describe('LumaGenerationService.generateComposite', () => {
     expect(AbortSignal.timeout).toHaveBeenCalledWith(270_000);
     expect(fake.getGeneration).not.toHaveBeenCalled();
     vi.mocked(AbortSignal.timeout).mockRestore();
+  });
+
+  it('throws LumaServiceGenerationError poll_failed with the Luma id when a status poll fails mid-job', async () => {
+    const fake: FakeLumaClient = {
+      createGeneration: vi.fn().mockResolvedValue(makeGeneration({ state: 'queued' })),
+      getGeneration: vi.fn().mockRejectedValue(new LumaApiError(500, 'req-456')),
+    };
+
+    const pending = makeService(fake).generateComposite(request);
+    const assertion = expect(pending).rejects.toMatchObject({
+      name: 'LumaServiceGenerationError',
+      code: 'poll_failed',
+      lumaId: LUMA_ID,
+    });
+    await vi.advanceTimersByTimeAsync(2_000);
+    await assertion;
   });
 
   it('throws LumaServiceGenerationError missing_output when Luma completes with no output', async () => {

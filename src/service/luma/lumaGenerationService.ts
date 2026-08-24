@@ -1,6 +1,6 @@
 import { setTimeout as sleep } from 'node:timers/promises';
 
-import { LumaClient, type Generation, type GenerationCreateParams } from '@/persistence/lumaClient';
+import { LumaApiError, LumaClient, type Generation, type GenerationCreateParams } from '@/persistence/lumaClient';
 import type { LumaServiceCompositeRequest } from '@/model/lumaServiceCompositeRequest';
 import { LumaServiceGenerationError } from '@/service/luma/lumaServiceGenerationError';
 
@@ -52,11 +52,23 @@ export class LumaGenerationService {
 
     const signal = AbortSignal.timeout(POLL_DEADLINE_MS);
     while (generation.state !== 'completed' && generation.state !== 'failed') {
-      if (signal.aborted) {
-        throw new LumaServiceGenerationError('poll_timeout', generation.id);
+      try {
+        // Both the sleep and the status request are bound to the deadline, so
+        // a hung poll aborts at 270s instead of eating the headroom before the
+        // platform's 300s kill.
+        await sleep(POLL_INTERVAL_MS, undefined, { signal });
+        generation = await this.luma.getGeneration(generation.id, signal);
+      } catch (error) {
+        if (signal.aborted) {
+          throw new LumaServiceGenerationError('poll_timeout', generation.id);
+        }
+        if (error instanceof LumaApiError) {
+          // The job is billed and may still be running at Luma; carry the id
+          // so the caller can re-poll instead of losing it to a generic 502.
+          throw new LumaServiceGenerationError('poll_failed', generation.id);
+        }
+        throw error;
       }
-      await sleep(POLL_INTERVAL_MS);
-      generation = await this.luma.getGeneration(generation.id);
     }
 
     if (generation.state === 'failed') {

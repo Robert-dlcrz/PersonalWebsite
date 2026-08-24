@@ -261,6 +261,15 @@ describe('POST /api/trips/composite — error mapping', () => {
     });
   });
 
+  it('maps a mid-job poll failure to 502 with the Luma id for manual re-polling', async () => {
+    mockGenerate.mockRejectedValue(new LumaServiceGenerationError('poll_failed', LUMA_ID));
+
+    const response = await POST(makeRequest());
+
+    expect(response.status).toBe(502);
+    await expect(response.json()).resolves.toEqual({ error: 'poll_failed', lumaId: LUMA_ID });
+  });
+
   it('maps a poll timeout to 504 with the Luma id for manual re-polling', async () => {
     mockGenerate.mockRejectedValue(new LumaServiceGenerationError('poll_timeout', LUMA_ID));
 

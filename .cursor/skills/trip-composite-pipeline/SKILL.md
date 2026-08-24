@@ -74,6 +74,7 @@ Two secrets by design: the Luma key talks to Luma, the pipeline secret talks to 
 | 422 | `luma_rejected_request` | Luma refused the parameters (e.g. image side >8,000 px, dead `file_id`) — nothing was billed |
 | 429 | `luma_rate_limited` | Wait and retry |
 | 502 | `luma_auth_failed` / `luma_unavailable` | Check the Luma key in Vercel env; otherwise retry later |
+| 502 | `poll_failed` + `lumaId` | A status poll failed mid-job; the billed job may still be running — re-poll `GET /v1/generations/{lumaId}` with the Luma key |
 | 504 | `poll_timeout` + `lumaId` | Job may still finish at Luma; re-poll `GET /v1/generations/{lumaId}` with the Luma key |
 | 500 | `persist_failed` + `lumaId` | Generation was billed and succeeded; re-poll the `lumaId` within 1 hour for a fresh presigned URL |
 

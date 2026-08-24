@@ -95,6 +95,8 @@ function mapLumaServiceError(error: LumaServiceGenerationError): Response {
       );
     case 'poll_timeout':
       return Response.json({ error: 'poll_timeout', lumaId: error.lumaId }, { status: 504 });
+    case 'poll_failed':
+      return Response.json({ error: 'poll_failed', lumaId: error.lumaId }, { status: 502 });
     case 'missing_output':
       return Response.json({ error: 'persist_failed', lumaId: error.lumaId }, { status: 500 });
   }

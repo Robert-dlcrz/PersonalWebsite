@@ -53,9 +53,9 @@ export class LumaClient {
     }
   }
 
-  async getGeneration(id: string): Promise<Generation> {
+  async getGeneration(id: string, signal?: AbortSignal): Promise<Generation> {
     try {
-      return await this.client.generations.get(id);
+      return await this.client.generations.get(id, { signal });
     } catch (error) {
       throw toLumaApiError(error);
     }

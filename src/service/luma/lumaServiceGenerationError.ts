@@ -1,4 +1,8 @@
-export type LumaServiceGenerationErrorCode = 'generation_failed' | 'poll_timeout' | 'missing_output';
+export type LumaServiceGenerationErrorCode =
+  | 'generation_failed'
+  | 'poll_timeout'
+  | 'poll_failed'
+  | 'missing_output';
 
 /**
  * Typed failure from the Luma generation service. The route maps `code` to HTTP;
