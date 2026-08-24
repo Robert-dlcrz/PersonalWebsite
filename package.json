@@ -13,6 +13,7 @@
     "test": "vitest run --coverage && node scripts/print-coverage-report.mjs",
     "test:e2e": "playwright test",
     "trip:onboard": "node scripts/onboard-trip.mjs",
+    "trip:cover": "node scripts/set-trip-cover.mjs",
     "heic:convert": "node scripts/convert-heic.mjs"
   },
   "dependencies": {
@@ -20,6 +21,7 @@
     "@vercel/blob": "^2.8.0",
     "github-slugger": "^2.0.0",
     "gray-matter": "^4.0.3",
+    "luma-agents": "^0.1.2",
     "mdast-util-to-string": "^4.0.0",
     "motion": "^12.38.0",
     "next": "16.3.1",
@@ -35,7 +37,8 @@
     "shiki": "^4.4.3",
     "unified": "^11.0.5",
     "unist-util-visit": "^5.1.0",
-    "yet-another-react-lightbox": "^3.32.2"
+    "yet-another-react-lightbox": "^3.32.2",
+    "zod": "^4.4.3"
   },
   "engines": {
     "pnpm": ">=8.0.0"
