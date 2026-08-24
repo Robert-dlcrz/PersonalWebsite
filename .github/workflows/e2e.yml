@@ -1,0 +1,196 @@
+name: E2E
+
+# Runs the Playwright steel-thread against the Vercel preview for a commit, so it
+# has to start after Vercel finishes deploying rather than on `pull_request`.
+# This is deliberately separate from verify.yml, which lints, unit tests, and builds.
+on:
+  # The deployment statuses the Vercel GitHub app publishes. (Vercel's
+  # repository_dispatch events are not used: `vercel.deployment.success` only
+  # fires for production promotions, and `vercel.deployment.ready` would
+  # duplicate the deployment_status runs.)
+  deployment_status:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: Preview URL to test, e.g. https://personal-website-abc123-owner.vercel.app
+        required: true
+        type: string
+      ref:
+        description: Git ref or SHA to check out (defaults to the selected branch)
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: >-
+    e2e-${{ github.event.deployment_status.environment_url
+    || inputs.base_url
+    || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  resolve:
+    name: Resolve preview target
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.target.outputs.should_run }}
+      base_url: ${{ steps.target.outputs.base_url }}
+      sha: ${{ steps.target.outputs.sha }}
+    steps:
+      # Payload values are read through env rather than inlined into the script.
+      - name: Resolve preview URL and commit
+        id: target
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          STATUS_STATE: ${{ github.event.deployment_status.state }}
+          STATUS_ENVIRONMENT: ${{ github.event.deployment_status.environment }}
+          STATUS_URL: ${{ github.event.deployment_status.environment_url }}
+          STATUS_SHA: ${{ github.event.deployment.sha }}
+          INPUT_URL: ${{ inputs.base_url }}
+          INPUT_REF: ${{ inputs.ref }}
+          FALLBACK_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+
+          should_run=false
+          base_url=""
+          sha="$FALLBACK_SHA"
+          skip_reason=""
+
+          case "$EVENT_NAME" in
+            deployment_status)
+              status_environment_lower="${STATUS_ENVIRONMENT,,}"
+              if [ "$STATUS_STATE" != "success" ]; then
+                skip_reason="deployment state is '$STATUS_STATE', not 'success'"
+              elif [ "${status_environment_lower#preview}" = "$status_environment_lower" ]; then
+                skip_reason="deployment environment is '$STATUS_ENVIRONMENT', not a preview"
+              else
+                base_url="$STATUS_URL"
+                sha="${STATUS_SHA:-$FALLBACK_SHA}"
+                should_run=true
+              fi
+              ;;
+            workflow_dispatch)
+              base_url="$INPUT_URL"
+              sha="${INPUT_REF:-$FALLBACK_SHA}"
+              should_run=true
+              ;;
+            *)
+              skip_reason="unsupported event '$EVENT_NAME'"
+              ;;
+          esac
+
+          if [ "$should_run" != "true" ]; then
+            echo "Skipping e2e: $skip_reason"
+            echo "should_run=false" >>"$GITHUB_OUTPUT"
+            echo "Skipped e2e: $skip_reason" >>"$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          base_url="${base_url%/}"
+
+          case "$base_url" in
+            https://*) ;;
+            *)
+              echo "::error::Could not resolve an https preview URL (got '$base_url')."
+              exit 1
+              ;;
+          esac
+
+          # Guard against ever pointing the suite at the live site, and only
+          # accept *.vercel.app hosts so a bad payload cannot aim the browser
+          # (and the bypass secret) at an arbitrary target.
+          host="${base_url#https://}"
+          host="${host%%/*}"
+          case "$host" in
+            robertdelacruz.com | www.robertdelacruz.com)
+              echo "::error::Refusing to run e2e against production ($host)."
+              exit 1
+              ;;
+            *.vercel.app) ;;
+            *)
+              echo "::error::Refusing to run e2e against non-vercel.app host '$host'."
+              exit 1
+              ;;
+          esac
+
+          # A payload-derived sha is handed to actions/checkout; anything but a
+          # full commit hash means the payload was malformed. Manual runs are
+          # exempt: their ref input legitimately accepts branch names and tags.
+          if [ "$EVENT_NAME" != "workflow_dispatch" ]; then
+            if ! printf '%s' "$sha" | grep -Eq '^[0-9a-f]{40}$'; then
+              echo "::error::Resolved commit '$sha' is not a 40-char hex sha."
+              exit 1
+            fi
+          fi
+
+          echo "Resolved preview $base_url at commit $sha (via $EVENT_NAME)"
+
+          echo "should_run=true" >>"$GITHUB_OUTPUT"
+          echo "base_url=$base_url" >>"$GITHUB_OUTPUT"
+          echo "sha=$sha" >>"$GITHUB_OUTPUT"
+
+          {
+            echo "### E2E target"
+            echo ""
+            echo "- Trigger: \`$EVENT_NAME\`"
+            echo "- Preview: $base_url"
+            echo "- Commit: \`$sha\`"
+          } >>"$GITHUB_STEP_SUMMARY"
+
+  e2e:
+    name: Playwright (chromium)
+    needs: resolve
+    if: needs.resolve.outputs.should_run == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      # Fail in seconds if the repo secret is missing, instead of after
+      # checkout, pnpm install, and a Chromium download. Secrets cannot be read
+      # in `if:` expressions, so check through env indirection.
+      - name: Require bypass secret
+        env:
+          SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+        run: |
+          if [ -z "$SECRET" ]; then
+            echo "::error::The VERCEL_AUTOMATION_BYPASS_SECRET repo secret is not set. Generate it in Vercel (Project → Settings → Deployment Protection → Protection Bypass for Automation) and add it under GitHub → Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.resolve.outputs.sha }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Chromium
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run Playwright
+        run: pnpm test:e2e
+        env:
+          E2E_BASE_URL: ${{ needs.resolve.outputs.base_url }}
+          # Lets the suite through Vercel Deployment Protection without turning
+          # protection off for human visitors. Generated in Vercel → Project →
+          # Settings → Deployment Protection → Protection Bypass for Automation.
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v7
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
