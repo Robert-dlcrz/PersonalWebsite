@@ -1,5 +1,11 @@
 [
   {
+    "slug": "using-lumas-api-to-generate-trip-covers",
+    "title": "Using Luma's API to Generate Trip Covers",
+    "date": "2026-08-24",
+    "excerpt": "I wired Luma's image API into my site so a handful of trip photos can be intelligently combined into a single cover."
+  },
+  {
     "slug": "five-ai-workflows",
     "title": "5 AI Workflows You Should Be Using Right Now",
     "date": "2026-05-11",
