@@ -70,7 +70,8 @@ export function InterestsPageContent({ trips }: InterestsPageContentProps) {
           transition={cardsTransition}
           className="mt-3 text-[0.7rem] tracking-[0.22em] text-foreground/55 md:text-xs"
         >
-          {INTERESTS_CONTENT.coverNote.text}{' '}
+          {INTERESTS_CONTENT.coverNote.text}
+          <br />
           <Link href={INTERESTS_CONTENT.coverNote.href} className="underline hover:text-foreground/80">
             {INTERESTS_CONTENT.coverNote.linkLabel}
           </Link>
