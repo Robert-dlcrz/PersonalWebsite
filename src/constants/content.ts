@@ -58,16 +58,6 @@ export const NAVIGATION_CARDS = [
     accentColor: 'text-slate-900 dark:text-slate-100',
   },
   {
-    id: 'interests',
-    href: '/interests',
-    icon: GlobeAltIcon,
-    gradientClasses: 'from-green-400 to-blue-500',
-    title: 'Travel',
-    description: 'Explore my journey around the world. From mountain peaks to hidden gems, discover the places I\'ve been and the adventures I\'ve had.',
-    ctaText: 'View Adventures',
-    accentColor: 'text-blue-600 dark:text-blue-400',
-  },
-  {
     id: 'blog',
     href: '/blog',
     icon: PencilSquareIcon,
@@ -76,6 +66,16 @@ export const NAVIGATION_CARDS = [
     description: 'Notes on software engineering, AI workflows, and how I build.',
     ctaText: 'Read Posts',
     accentColor: 'text-amber-700 dark:text-amber-400',
+  },
+  {
+    id: 'interests',
+    href: '/interests',
+    icon: GlobeAltIcon,
+    gradientClasses: 'from-green-400 to-blue-500',
+    title: 'Travel',
+    description: 'Explore my journey around the world. From mountain peaks to hidden gems, discover the places I\'ve been and the adventures I\'ve had.',
+    ctaText: 'View Adventures',
+    accentColor: 'text-blue-600 dark:text-blue-400',
   },
 ] as const;
 
