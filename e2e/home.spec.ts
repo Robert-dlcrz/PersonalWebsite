@@ -31,7 +31,7 @@ async function expectSiteAndNotVercelLogin(page: Page, response: Response | null
   expect(title, `${PROTECTION_HINT} (page title: "${title}")`).not.toMatch(VERCEL_AUTH_TITLE);
 }
 
-test('homepage renders the hero heading and the About Me, Travel, and Blog entry points', async ({
+test('homepage renders the hero heading and the About Me, Blog, and Travel entry points in order', async ({
   page,
 }) => {
   const response = await page.goto('/', { waitUntil: 'domcontentloaded' });
@@ -45,7 +45,12 @@ test('homepage renders the hero heading and the About Me, Travel, and Blog entry
   // The home cards are asserted rather than the navbar: under
   // prefers-reduced-motion the navbar settles at opacity 0, which toBeVisible()
   // does not catch, so a navbar assertion would pass without proving anything.
-  for (const title of ['About Me', 'Travel', 'Blog']) {
+  const expectedOrder = ['About Me', 'Blog', 'Travel'];
+  for (const title of expectedOrder) {
     await expect(page.getByRole('heading', { level: 3, name: title, exact: true })).toBeVisible();
   }
+
+  const cardHeadings = page.getByRole('heading', { level: 3 });
+  const texts = await cardHeadings.allTextContents();
+  expect(texts).toEqual(expectedOrder);
 });
