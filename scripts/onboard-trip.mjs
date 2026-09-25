@@ -9,6 +9,16 @@ import { promisify } from 'node:util'
 import { fileURLToPath } from 'node:url'
 import { list, put } from '@vercel/blob'
 
+import {
+  buildCompositeRequestBody,
+  costHint,
+  generateTripCover,
+  installTripCover,
+  selectCompositeRefs,
+  shouldGenerateCover,
+  validateCoverEnv,
+} from './lib/trip-cover-pipeline.mjs'
+
 const execFileAsync = promisify(execFile)
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -16,6 +26,7 @@ const repoRoot = path.resolve(__dirname, '..')
 const mediaRoot = path.join(repoRoot, 'media')
 const tripMediaRoot = path.join(mediaRoot, 'trips')
 const tripsIndexPath = path.join(mediaRoot, 'trips_index.json')
+const defaultBlobBaseUrl = 'https://avswwi5vtnxsddjy.public.blob.vercel-storage.com' // pragma: allowlist secret
 const defaultPhotoStagingRoot = '/Users/robertdelacruz/bin/website_photos'
 const supportedPhotoExtensions = new Set(['.jpg', '.jpeg'])
 const monthNames = [
@@ -48,6 +59,7 @@ const promptExamples = {
 function parseArgs(argv) {
   const args = {
     dryRun: false,
+    skipCover: false,
   }
 
   for (let index = 0; index < argv.length; index += 1) {
@@ -58,7 +70,12 @@ function parseArgs(argv) {
       continue
     }
 
-    throw new Error(`Unsupported argument: ${token}. Only --dry-run is supported.`)
+    if (token === '--skip-cover') {
+      args.skipCover = true
+      continue
+    }
+
+    throw new Error(`Unsupported argument: ${token}. Supported: --dry-run, --skip-cover.`)
   }
 
   return args
@@ -331,9 +348,18 @@ async function convertHeicFiles(heicFiles, dryRun) {
   return convertedFiles
 }
 
-async function ensureCoverPhoto({ sourceDir, jpgFiles, dryRun }) {
+async function ensureCoverPhoto({ sourceDir, jpgFiles, dryRun, willGenerateCover }) {
   if (jpgFiles.length === 0) {
     throw new Error(`No JPG photos found in ${sourceDir}`)
+  }
+
+  if (willGenerateCover) {
+    logStep('Skipping manual cover selection — Luma composite will generate cover.jpg')
+    return {
+      coverPath: null,
+      createdCover: false,
+      selectedSource: null,
+    }
   }
 
   const existingCover = jpgFiles.find((file) => path.basename(file).toLowerCase() === 'cover.jpg')
@@ -530,6 +556,7 @@ function printSummary({
   convertedFiles,
   coverResult,
   uploadedPhotos,
+  compositeResult,
   dryRun,
 }) {
   console.log('\nTrip onboarding summary')
@@ -542,10 +569,17 @@ function printSummary({
     console.log('- Converted HEIC files: none')
   }
 
-  if (coverResult.createdCover) {
-    console.log(`- cover.jpg created from: ${path.basename(coverResult.selectedSource)}`)
+  if (compositeResult) {
+    console.log(`- Composite id: ${compositeResult.id}`)
+    console.log(`- Composite cover URL: ${compositeResult.url}`)
+  } else if (coverResult.coverPath) {
+    if (coverResult.createdCover) {
+      console.log(`- cover.jpg created from: ${path.basename(coverResult.selectedSource)}`)
+    } else {
+      console.log(`- cover.jpg reused: ${path.basename(coverResult.coverPath)}`)
+    }
   } else {
-    console.log(`- cover.jpg reused: ${path.basename(coverResult.coverPath)}`)
+    console.log('- cover.jpg: deferred to Luma composite generation')
   }
 
   console.log(`- Local trip file: ${toRelativeRepoPath(tripDetailFilePath)}`)
@@ -558,7 +592,6 @@ function printSummary({
     console.log(`- Uploaded photo files: ${uploadedPhotos.length}`)
     console.log(`- Uploaded trip detail from: ${toRelativeRepoPath(tripDetailFilePath)}`)
     console.log(`- Uploaded trips index from: ${toRelativeRepoPath(tripsIndexPath)}`)
-    console.log('- Next step: purge Vercel data cache or redeploy if the new trip does not appear immediately')
   }
 
   if (dryRun) {
@@ -572,6 +605,21 @@ async function main() {
   await loadEnvFiles()
 
   const dryRun = parsedArgs.dryRun
+  const generateCover = shouldGenerateCover({
+    dryRun,
+    skipCover: parsedArgs.skipCover,
+  })
+
+  if (generateCover) {
+    const missingVars = validateCoverEnv(process.env)
+
+    if (missingVars.length > 0) {
+      throw new Error(
+        `Cover generation requires these env vars: ${missingVars.join(', ')}. ` +
+          'Set them in your shell or .env.local.',
+      )
+    }
+  }
 
   logStep('Collecting trip details')
   const tripInput = await resolveTripInput()
@@ -595,6 +643,7 @@ async function main() {
     sourceDir: tripInput.sourceDir,
     jpgFiles: photoFiles.jpgFiles,
     dryRun,
+    willGenerateCover: generateCover,
   })
 
   const tripsIndex = await readJson(tripsIndexPath)
@@ -628,6 +677,35 @@ async function main() {
     })
   }
 
+  let compositeResult = null
+
+  if (generateCover) {
+    const blobBaseUrl = (process.env.BLOB_BASE_URL ?? defaultBlobBaseUrl).replace(/\/+$/, '')
+    const compositeRefs = selectCompositeRefs(uploadedPhotos)
+
+    logStep(`Selected ${compositeRefs.length} refs for composite (${costHint(compositeRefs.length)})`)
+
+    const body = buildCompositeRequestBody(compositeRefs, blobBaseUrl)
+
+    logStep('Generating trip cover via Luma composite API')
+    compositeResult = await generateTripCover({
+      compositeApiUrl: process.env.COMPOSITE_API_URL,
+      pipelineSecret: process.env.PIPELINE_SECRET,
+      body,
+    })
+
+    logStep(`Composite generated: id=${compositeResult.id}`)
+    logStep('Installing composite as trip cover')
+
+    const setCoverScript = path.join(__dirname, 'set-trip-cover.mjs')
+    await installTripCover({
+      imageUrl: compositeResult.url,
+      trip: `${tripSummary.year}/${tripSummary.slug}`,
+      scriptPath: setCoverScript,
+      execFileFn: execFileAsync,
+    })
+  }
+
   printSummary({
     tripSummary,
     tripDirectory,
@@ -635,6 +713,7 @@ async function main() {
     convertedFiles,
     coverResult,
     uploadedPhotos,
+    compositeResult,
     dryRun,
   })
 }
