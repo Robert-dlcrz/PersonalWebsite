@@ -2,7 +2,7 @@
 
 ## Cursor Cloud specific instructions
 
-This is a Next.js 16 personal portfolio site using pnpm (enforced via `.npmrc` + `preinstall` script — npm/yarn will fail).
+This is a Next.js 16 personal portfolio site using pnpm (enforced via `.npmrc` + `preinstall` script — npm/yarn will fail). Node.js 26 is required (`engines.node` is `26.x`, `.node-version` is `26`). `.npmrc` sets `engine-strict=true`, so install fails on any other major.
 
 ### Running the dev server
 
