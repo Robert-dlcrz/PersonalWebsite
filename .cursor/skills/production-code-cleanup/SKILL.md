@@ -64,11 +64,6 @@ These came from places the first implementation was wrong, incomplete, or confli
 - Name registration helpers **`register*`** (not **`use*`**) so **`react-hooks/rules-of-hooks`** does not treat test setup as a React hook.
 - **Coverage output** under `coverage/` can trigger **eslint warnings**; fix **eslintignore** or clean artifacts—don’t treat generated files as source regressions.
 
-### Cursor artifacts
-
-- There is no `.cursor/plans/` directory. Do not create one. If a plan file is added later, leave it alone unless the user asks to edit or delete it.
-- If a plan says **“do not edit the plan file”**, respect it during execution.
-
 ### Documentation
 
 - **Keep** long JSDoc, component commentary, and **model docblocks** unless the user asks to shorten them.
@@ -77,7 +72,6 @@ These came from places the first implementation was wrong, incomplete, or confli
 ## User preferences (summary)
 
 - **Docs**: Preserve by default; expand when asked for clarity.
-- **Plans**: No `.cursor/plans/` folder. Do not create one, and leave any future plan files alone unless asked.
 - **Utils**: Pure, testable, small modules; constants at top; comments on security/shape-sensitive helpers.
 - **Verification**: **`pnpm lint`** and **`pnpm test`** after substantive edits.
 
@@ -96,4 +90,3 @@ Use with the user; let them **strike or reorder**:
 - [ ] **Types**: global augmentations only when needed; explain removals.
 - [ ] **Tests**: shared stub helpers; `register*` naming; colocated imports.
 - [ ] **Docs / comments**: keep prose; add where maintainers need context.
-- [ ] **Plans**: no `.cursor/plans/` folder; do not create one, and leave any future plan files alone unless asked.
