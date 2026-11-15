@@ -72,7 +72,7 @@ Rules:
 - `title` / `date` / `excerpt` should match the post frontmatter
 - `date` is `YYYY-MM-DD`
 - The app sorts posts by date descending, so file order is not critical; keeping newest-first is still nice for humans
-- Omit drafts (e.g. `hello-world`) until they are meant to be public
+- Omit unpublished drafts from both indexes until they are meant to be public. A `post.md` that is not in `blog_index.json` does not appear on `/blog`.
 
 ## Upload Steps
 

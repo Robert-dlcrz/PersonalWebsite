@@ -6,164 +6,85 @@ disable-model-invocation: true
 
 # Trip Onboarding
 
-Complete guide for adding new trips to robertdelacruz.com.
+Add a trip with the repo scripts. They write `media/trips/` and upload to Vercel Blob. Do not upload through the Vercel Dashboard, and do not run a hand-written `sips` loop.
 
-Use `pnpm trip:onboard` for the actual new-trip workflow. Keep this skill as the quick reference for what the script is doing behind the scenes and for troubleshooting if something does not appear correctly.
+`sips` still runs inside the scripts (macOS). `pnpm trip:onboard` converts HEIC files it finds in the source folder. For a one-off conversion outside that flow, use `pnpm heic:convert`.
 
-To swap an existing trip's cover with an image already in Blob (e.g. a generated composite), use `pnpm trip:cover -- --image <blob-url-or-pathname> --trip <year>/<slug>` — it verifies the trip path, converts PNG to JPEG if needed, and overwrites `cover.jpg`; no manual sips or Dashboard upload required.
+## Commands
 
-## Prerequisites
+### New trip: `pnpm trip:onboard`
 
-- Photos converted to JPG (not HEIC)
-- Access to Vercel Dashboard (Blob Storage)
-- A `cover.jpg` selected for the trip thumbnail
+Interactive. Loads `.env.local`, then `.env`, without overriding variables already set. Requires `ROBDLC_PERSONAL_WEBSITE_READ_WRITE_TOKEN`.
 
-### Converting HEIC to JPG
+Prompts for year, full month name, slug, title, location, description, start date (`yyyy-mm-dd`), end date, optional comma-separated tags, and a source photo directory. The default source directory is `/Users/robertdelacruz/bin/website_photos/{slug}`.
+
+Then it:
+
+1. Converts `.heic` files in that directory to `.jpg` beside the originals (originals stay).
+2. Requires at least one `.jpg` or `.jpeg`.
+3. Refuses the trip if `media/trips/{year}_{slug}/trip.json` or Blob `trips/{year}/{slug}/` already exists.
+4. Writes `media/trips/{year}_{slug}/trip.json` and updates `media/trips_index.json`.
+5. Uploads each photo to `trips/{year}/{slug}/photos/`, `trip.json` to `trips/{year}/{slug}/trip.json`, and the index to `trips/trips_index.json` (index overwrite is allowed).
+
+Cover behavior:
+
+- A real run generates a Luma composite and installs it as `cover.jpg`. That is a paid call. It needs `PIPELINE_SECRET`, `COMPOSITE_API_URL`, and the Blob token before any work starts. The server at `COMPOSITE_API_URL` also needs `LUMA_AGENTS_API_KEY`.
+- `--skip-cover` skips Luma. An existing `cover.jpg` in the source directory is reused; otherwise the script asks which JPG to copy to `cover.jpg`.
+- `--dry-run` writes nothing, uploads nothing, and does not call Luma.
 
 ```bash
-cd /Users/robertdelacruz/bin/website_photos/{trip_slug}
-for f in *.HEIC; do sips -s format jpeg "$f" --out "${f%.*}.jpg"; done
-rm *.HEIC
+pnpm trip:onboard
+pnpm trip:onboard --dry-run
+pnpm trip:onboard --skip-cover
 ```
 
----
+The script rejects a literal `--` argument. Pass flags directly.
 
-## Onboarding Steps
+### Replace a cover: `pnpm trip:cover`
 
-### Step 1: Prepare Local Photos
+Use when the image is already in this Blob store (for example a composite at `trips/composites/<lumaId>.jpg`).
 
-> **Note:** Photos are stored locally on the Mac mini at `/Users/robertdelacruz/bin/website_photos/`.
-> This is the historical location used for trip photo staging.
-
-1. Create folder: `/Users/robertdelacruz/bin/website_photos/{slug}/`
-2. Add all trip photos (JPG format)
-3. Create thumbnail: `cp {best_photo}.jpg cover.jpg`
-
-### Step 2: Upload to Vercel Blob
-
-In Vercel Dashboard → Storage → Blob:
-
-1. Navigate to `trips/`
-2. Create folder structure: `{year}/{slug}/photos/`
-3. Upload all JPGs including `cover.jpg`
-
-**Final path:** `trips/{year}/{slug}/photos/`
-
-### Step 3: Create trip.json
-
-Create the trip detail file in two places:
-
-1. **Local repo:** `media/trips/{year}_{slug}/trip.json` — commit to Git for version control
-2. **Vercel Blob:** `trips/{year}/{slug}/trip.json` — upload via Dashboard
-
-See example: [media/trips/2024_new_york/trip.json](../../../media/trips/2024_new_york/trip.json)
-
-Note: `tags` are defined but not currently displayed in the UI (planned feature).
-
-### Step 4: Update trips_index.json
-
-Update in two places:
-
-1. **Local repo:** `media/trips_index.json` — commit to Git for version control
-2. **Vercel Blob:** `trips/trips_index.json` — download, add entry, re-upload
-
-```json
-{
-  "year": 2025,
-  "month": "January",
-  "slug": "hawaii",
-  "title": "Hawaii",
-  "location": "Hawaii, USA",
-  "description": "Your trip description",
-  "photosPath": "trips/2025/hawaii/photos"
-}
+```bash
+pnpm trip:cover -- --image <blob-url-or-pathname> --trip <year>/<slug>
+pnpm trip:cover -- --image <blob-url-or-pathname> --trip <year>/<slug> --dry-run
 ```
 
-### Step 5: Clear Cache
+It checks that `trips/{year}/{slug}/photos/` already has blobs, fetches the image (the URL must be in this store), converts PNG to JPEG, and overwrites `trips/{year}/{slug}/photos/cover.jpg`. JPEG input is uploaded as-is. Missing `--image` or `--trip` falls through to prompts. This script accepts a literal `--` because pnpm forwards it.
 
-After uploading, purge the cache:
+### HEIC outside onboarding: `pnpm heic:convert`
 
-- **Option A:** Vercel Dashboard → Settings → Data Cache → Purge Everything
-- **Option B:** Run `vercel --prod` to redeploy
-
----
-
-## Blob Structure Reference
-
+```bash
+pnpm heic:convert path/to/photo.HEIC
+pnpm heic:convert path/to/photo.HEIC --out path/to/photo.jpg
+pnpm heic:convert path/to/folder
+pnpm heic:convert path/to/folder --out path/to/output-folder
+pnpm heic:convert path/to/photo.HEIC --dry-run
 ```
+
+Writes JPEG next to the source unless `--out` is set. Does not delete the HEIC files.
+
+## Blob layout
+
+```text
 trips/
-├── trips_index.json           ← Master list (Step 4)
+├── trips_index.json
 └── {year}/
     └── {slug}/
-        ├── trip.json          ← Trip details (Step 3)
+        ├── trip.json
         └── photos/
-            ├── cover.jpg      ← Required thumbnail
-            ├── IMG_001.jpg
+            ├── cover.jpg
             └── ...
 ```
 
----
+Local copies: `media/trips_index.json` and `media/trips/{year}_{slug}/trip.json`. See `media/trips/2024_new_york/trip.json`.
 
-## Dynamic Routes: Why New Trips Work Without Redeployment
+Trip pages prebuild known slugs and set `dynamicParams = true`, so a new trip can render without a redeploy. Trip fetches revalidate for 10 minutes (`tripService.ts`). After `trip:cover`, Blob edge purge can take about a minute; locally, hard-refresh or remove `.next/cache`.
 
-The trip detail page uses both `generateStaticParams` and `dynamicParams = true`:
+## When it fails
 
-| Config | Purpose |
-|--------|---------|
-| `generateStaticParams` | Pre-builds known trips at deploy time (~50ms CDN delivery) |
-| `dynamicParams = true` | Allows new trips to render on-demand without code redeployment |
-
-**Result:** Known trips are instant; new trips work immediately after cache purge (first request ~200-500ms, then cached).
-
-See: `src/app/interests/[year]/[trip]/page.tsx`
-
----
-
-## Troubleshooting: Content Not Appearing
-
-### CDN Caching Issue (Most Common)
-
-**Symptom:** Uploaded new content to Vercel Blob but website shows old/missing content for 10+ minutes.
-
-**Cause:** Vercel's CDN and browser cache the blob URLs aggressively. The upload succeeds immediately, but:
-- The URL is the same
-- The edge/CDN has cached the old response
-- The browser reuses the cached version
-
-**This is not a bug** — it's expected CDN behavior.
-
-### Solutions
-
-| Method | How |
-|--------|-----|
-| **Purge Data Cache** | Vercel Dashboard → Settings → Data Cache → Purge Everything |
-| **Redeploy** | Run `vercel --prod` |
-| **Hard Refresh Browser** | Cmd+Shift+R (Mac) or Ctrl+Shift+R (Windows) |
-| **Incognito Window** | Test in private browsing to bypass browser cache |
-
-### Cache Duration
-
-The app uses a 10-minute revalidation window (`revalidate: 600` in `tripService.ts`). After purging, content updates within the next request cycle.
-
-### If Still Not Working
-
-1. Verify blob paths are correct in Vercel Dashboard
-2. Check `trips_index.json` contains the new trip entry
-3. Ensure `cover.jpg` exists in the photos folder
-4. Check browser console for 404 errors on specific assets
-
----
-
-## Quick Checklist
-
-```
-Trip Onboarding:
-- [ ] Photos converted to JPG
-- [ ] cover.jpg created
-- [ ] Photos uploaded to Vercel Blob: trips/{year}/{slug}/photos/
-- [ ] trip.json created in media/trips/{year}_{slug}/ and uploaded to Vercel Blob
-- [ ] trips_index.json updated in media/ and in Vercel Blob
-- [ ] Local changes committed to Git
-- [ ] Cache purged (Data Cache or redeploy)
-- [ ] Verified in incognito/hard refresh
-```
+- Missing `ROBDLC_PERSONAL_WEBSITE_READ_WRITE_TOKEN`.
+- Real onboard without `PIPELINE_SECRET` or `COMPOSITE_API_URL` (use `--skip-cover` only when a generated cover is not wanted).
+- Source directory has no JPG/JPEG after HEIC conversion.
+- Trip already exists locally or under `trips/{year}/{slug}/` in Blob.
+- `trip:cover` image URL is outside this store, or `trips/{year}/{slug}/photos/` is empty.
+- `sips` is missing (the converters are macOS-only).
