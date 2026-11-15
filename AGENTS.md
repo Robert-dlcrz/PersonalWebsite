@@ -14,6 +14,8 @@ The `BLOB_BASE_URL` env var is required for the `/interests` and `/blog` pages (
 
 The `ROBDLC_PERSONAL_WEBSITE_READ_WRITE_TOKEN` env var is needed for listing trip photos via `@vercel/blob` `list()`. Without it, trip detail pages render but show no photo gallery. The code handles this gracefully (try/catch returns empty array).
 
+Vercel-connected store variables for this project use the prefix `ROBDLC_PERSONAL_WEBSITE_`. The Blob read/write token above is the one the app and trip scripts use. Hand-set variables are not under that prefix: `BLOB_BASE_URL`, `PIPELINE_SECRET`, `LUMA_AGENTS_API_KEY`, and `COMPOSITE_API_URL`.
+
 ### Lint / Build / Test
 
 - **Lint:** `pnpm lint` — runs ESLint 9 with `eslint-config-next`.
@@ -32,10 +34,14 @@ Task playbooks live in `.cursor/skills/<name>/SKILL.md`. Read the matching one b
 
 - **Trip onboarding** (`trip-onboarding`) — adding a trip, uploading travel photos to Blob, or new trip content not appearing.
 - **Blog publishing** (`blog-post-upload`) — uploading or troubleshooting blog posts under `media/blog` or Blob `blog/` folders.
-- **Vercel config** (`vercel-config`) — environment variables, deploys, or Vercel project settings.
-- **Branch cleanup** (`git-branch-cleanup`) — deleting merged branches, pruning origin refs, or checking whether a PR picked up new commits.
+- **Trip composite pipeline** (`trip-composite-pipeline`) — generating a trip composite through the secret-gated `/api/trips/composite` endpoint, or troubleshooting that call.
 - **Production cleanup** (`production-code-cleanup`) — hardening code, auditing staged changes, or matching prior refactor patterns.
-- **Machine setup** (`initial-setup`) — bootstrapping Homebrew and Node on a fresh Mac.
+
+### Local git hygiene (Robert's Mac only)
+
+Skip this on cloud agents. It applies only when an agent is running locally on Robert's Mac.
+
+Stale branches clutter his local git graph. On that machine, stay on the current branch or one short-lived branch, and do not create extra branches unless he asks. After a branch is merged, delete the local branch. Do not leave abandoned local branches behind. Do not force-push, and do not delete a remote branch, unless he asks.
 
 ### pnpm build scripts warning
 

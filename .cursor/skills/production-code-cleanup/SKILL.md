@@ -19,7 +19,7 @@ These came from places the first implementation was wrong, incomplete, or confli
 ### Next.js App Router + Blob-backed content
 
 - **`dynamicParams`**: Prefer **explicit** `export const dynamicParams = true` when sibling routes (e.g. trips) do the same, even if defaults might allow dynamic slugs—avoids accidental regressions. Add a **short comment** tying it to **Blob**: new slugs should work without redeploy or build-time enumeration.
-- **`generateStaticParams`**: **Never** ship **hardcoded** slug lists (e.g. `hello-world`) as the source of truth. Build the list from the **same bucket/index** the app uses, or return `[]` with a **safe fallback** when the index is missing—**log clearly** (e.g. missing `blog_index.json`).
+- **`generateStaticParams`**: **Never** ship **hardcoded** slug lists as the source of truth. Build the list from the **same bucket/index** the app uses, or return `[]` with a **safe fallback** when the index is missing—**log clearly** (e.g. missing `blog_index.json`).
 - **Duplicate fetches** (`generateMetadata` + page): Deduplicate with **`react`'s `cache()`** (or equivalent) for the same request; **comment why** so future maintainers know it is intentional request-scoped reuse, not accidental coupling.
 - **`generateMetadata`**: Add a **brief comment** that Next calls it for `<title>` / meta (helps backend-oriented readers).
 
@@ -66,7 +66,7 @@ These came from places the first implementation was wrong, incomplete, or confli
 
 ### Cursor artifacts
 
-- **Do not delete** `.cursor/plans/` unless the user explicitly asks; the user removes plans when ready.
+- There is no `.cursor/plans/` directory. Do not create one. If a plan file is added later, leave it alone unless the user asks to edit or delete it.
 - If a plan says **“do not edit the plan file”**, respect it during execution.
 
 ### Documentation
@@ -77,7 +77,7 @@ These came from places the first implementation was wrong, incomplete, or confli
 ## User preferences (summary)
 
 - **Docs**: Preserve by default; expand when asked for clarity.
-- **Plans**: Hands off; user deletes.
+- **Plans**: No `.cursor/plans/` folder. Do not create one, and leave any future plan files alone unless asked.
 - **Utils**: Pure, testable, small modules; constants at top; comments on security/shape-sensitive helpers.
 - **Verification**: **`pnpm lint`** and **`pnpm test`** after substantive edits.
 
@@ -96,4 +96,4 @@ Use with the user; let them **strike or reorder**:
 - [ ] **Types**: global augmentations only when needed; explain removals.
 - [ ] **Tests**: shared stub helpers; `register*` naming; colocated imports.
 - [ ] **Docs / comments**: keep prose; add where maintainers need context.
-- [ ] **Plans**: leave `.cursor/plans/` alone unless user says otherwise.
+- [ ] **Plans**: no `.cursor/plans/` folder; do not create one, and leave any future plan files alone unless asked.
